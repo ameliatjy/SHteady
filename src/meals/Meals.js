@@ -356,13 +356,13 @@ const styles = StyleSheet.create({
         flex: 1
     },
     mealcreditword: {
-        paddingRight: 100,
-        paddingLeft: 35,
+        flex: 9,
+        marginLeft: 20,
         fontSize: 17
     },
     redeembtn: {
-        paddingLeft: 100,
-        paddingRight: 35,
+        flex: 3,
+        marginRight: 20,
         fontSize: 17,
         color: '#616161'
     },
