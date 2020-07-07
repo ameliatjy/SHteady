@@ -5,9 +5,12 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import SubmitReport from './SubmitReport'
 import History from './History'
 import MasterHistory from './MasterHistory'
+import ReceivedHistory from './ReceivedHistory';
+import InProgressHistory from './InProgressHistory'
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
+
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -44,9 +47,15 @@ export default class Report extends Component {
                 <Tab.Screen name='New Report' component={SubmitReport}/>
                 {
                     this.checkAccess() ? 
-                    <Tab.Screen name='All Reports' component={MasterHistory}/>
+                    <Tab.Screen name='Received' component={ReceivedHistory}/>
                     :
                     <Tab.Screen name='Past Reports' component={History}/>
+                }
+                {
+                    this.checkAccess() ? 
+                    <Tab.Screen name='In Progress' component={InProgressHistory}/> 
+                    :
+                    null
                 }
             </Tab.Navigator>
         )

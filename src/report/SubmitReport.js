@@ -33,18 +33,27 @@ const submitReport = (placeText, problemText, addText) => {
     );
 }
 
+// need?
+// const copyFbRecord = (original, copy) => {
+//     original.once('value').then(snap => {
+//         copy.set(snap.val())
+//     })
+// }
+
 const confirmedReport = (placeText, problemText, addText) => {
+    var user = firebase.auth().currentUser;
+    var matric = user.displayName
+
     var newReport = firebase.database().ref('report/').push()
     newReport.set({
-        time: firebase.database.ServerValue.TIMESTAMP,
+        timeSubmitted: firebase.database.ServerValue.TIMESTAMP,
         location: placeText,
         problem: problemText,
         otherDetails: addText,
-        status: 'RECEIVED'
+        status: 'RECEIVED',
+        reportSubmittedBy: matric,
+        lastUpdatedTime: firebase.database.ServerValue.TIMESTAMP
     })
-    
-    var user = firebase.auth().currentUser;
-    var matric = user.displayName
 
     var newKey = newReport.getKey()
     var currReports = []
@@ -143,6 +152,7 @@ export default class SubmitReport extends Component {
 const styles = StyleSheet.create({
     container : {
         flex: 1,
+        alignContent: 'center' // editted according to snapshot matching, check if got difference in display
     },
     question : {
         paddingTop: 20,
@@ -189,6 +199,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start'
     },
     inputShort : {
+        alignItems: 'center', //added according to jest
+        flex: 1, //added according to jest
         height: 40,
         width: 380,
         borderRadius: 5,
