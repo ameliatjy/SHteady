@@ -10,25 +10,6 @@ import Constants from "expo-constants";
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
-// const DATA = [
-//     {
-//         title: "Main dishes",
-//         data: ["Pizza", "Burger", "Risotto"]
-//     },
-//     {
-//         title: "Sides",
-//         data: ["French Fries", "Onion Rings", "Fried Shrimps"]
-//     },
-//     {
-//         title: "Drinks",
-//         data: ["Water", "Coke", "Beer"]
-//     },
-//     {
-//         title: "Desserts",
-//         data: ["Cheese Cake", "Ice Cream"]
-//     }
-// ];
-
 const Item = ({ title }) => (
     <View style={styles.item}>
         <Text style={styles.title}>{title}</Text>
@@ -37,24 +18,11 @@ const Item = ({ title }) => (
 
 class viewMenu extends Component {
     state = {
-        menudate: null,
         menu: null
     }
 
     componentDidMount() {
         var self = this;
-        var date = new Date().getDate().toString();
-        if (date.length <= 1) {
-            date = "0" + date
-        }
-        var month = (new Date().getMonth() + 1).toString();
-        if (month.length <= 1) {
-            month = "0" + month
-        }
-        var year = new Date().getFullYear().toString();
-
-        self.setState({ menudate: date + month + year })
-
         firebase.database().ref('menu').once('value', function(snapshot) {
             self.setState({menu: snapshot.val()})
             while(self.state.menu == null) {
