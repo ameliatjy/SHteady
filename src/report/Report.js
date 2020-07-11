@@ -27,7 +27,7 @@ export default class Report extends Component {
     }
 
     render() {
-        return(
+        return (
             <Tab.Navigator
                 tabBarOptions={{
 

@@ -60,7 +60,7 @@ export default class Navbar extends Component {
                         tabBarIcon: ({ color }) => (
                             <View style={styles.badgeCon}>
                             <IconAnt name={'profile'} size={29} color={color}/>
-                            <Badge value={this.state.taskCount} status={'error'} containerStyle={styles.dashboardBadge}/>
+                            {/* <Badge value={this.state.taskCount} status={'error'} containerStyle={styles.dashboardBadge}/> */}
                             </View>
                         )
                     }}

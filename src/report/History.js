@@ -42,21 +42,12 @@ export default class History extends Component {
 
 
         var user = firebase.auth().currentUser;
-
         var matric = user.displayName
+
         var currReports = []
         firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).on('value', function(snapshot) {
-                // curremail = snapshot.val().email;
             currReports = snapshot.val().submittedReports ? snapshot.val().submittedReports : [];
         })
-
-        // firebase.database().ref('/report').orderByValue('status').startAt('RECEIVED').endAt('IN PROGRESS').on('value', querySnapShot => {
-        //     let data = querySnapShot.val() ? querySnapShot.val() : {};
-        //     let historyItems = {...data}
-        //     this.setState({
-        //         history: historyItems
-        //     })
-        // });
 
         firebase.database().ref('/report').on('value', querySnapShot => {
             let data = querySnapShot.val() ? querySnapShot.val() : {};
