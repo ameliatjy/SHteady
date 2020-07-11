@@ -31,7 +31,7 @@ if (!firebase.apps.length) {
 export default class App extends Component {
 
   render() {
-      // console.disableYellowBox = true; // code to supress yellow box warning
+      console.disableYellowBox = true; // code to supress yellow box warning
     return (
       <View style={styles.container}>
         <StatusBar barStyle='dark-content'/>

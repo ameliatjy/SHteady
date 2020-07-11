@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import EditProfile from './EditProfile';
 import Status from './Status';
 import Communities from './Communities';
+import Contacts from './Contacts';
 
 
 const ProfileSubpagesStack = createStackNavigator();
@@ -40,6 +41,19 @@ export default function ProfileSubpagesScreen() {
             <ProfileSubpagesStack.Screen 
                 name='Communities' 
                 component={Communities}
+                options={{
+                    headerStyle: {
+                        backgroundColor: '#ff7d1d',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                    },
+                }}
+            />
+            <ProfileSubpagesStack.Screen 
+                name='Important Contacts' 
+                component={Contacts}
                 options={{
                     headerStyle: {
                         backgroundColor: '#ff7d1d',

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders snapshot as expected 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+      "justifyContent": "flex-end",
+    }
+  }
+>
+  <Image
+    source={1}
+    style={
+      Object {
+        "height": 200,
+        "width": 414,
+      }
+    }
+  />
+  <Text
+    style={
+      Object {
+        "fontSize": 25,
+        "marginVertical": 15,
+      }
+    }
+  >
+    Hey there, Shearite!
+  </Text>
+</View>
+`;

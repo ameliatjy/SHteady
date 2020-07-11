@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "login",
-    "slug": "login",
+    "name": "SHteady",
+    "slug": "shteady",
     "platforms": [
       "ios",
       "android",
@@ -23,6 +23,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "Sheares Hall Mobile Phone Application as part of NUS CP2106 Project.",
+    "githubUrl": "https://github.com/ameliatjy/SHteady-Public.git"
   }
 }

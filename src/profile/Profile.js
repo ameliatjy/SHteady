@@ -109,6 +109,10 @@ export default class Profile extends Component {
         this.props.navigation.navigate('Subpages', { screen: 'Communities' });
     }
 
+    viewContacts = () => {
+        this.props.navigation.navigate('Subpages', { screen: 'Important Contacts' });
+    }
+
     signOut = () => {
         Alert.alert(
             'Sign Out',
@@ -187,9 +191,9 @@ export default class Profile extends Component {
         const handleConfirm = () => {
             if (this.state.password1 == this.state.password2) {
                 var user = firebase.auth().currentUser;
-                user.updatePassword(this.state.password1).then(function() {
+                user.updatePassword(this.state.password1).then(function () {
                     //do nth
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.log(error);
                 })
                 Alert.alert(
@@ -197,7 +201,7 @@ export default class Profile extends Component {
                     'Password updated!',
                     [
                         {
-                            text:'Ok',
+                            text: 'Ok',
                             onPress: () => this.setState({ dialog: false }),
                         }
                     ]
@@ -208,8 +212,8 @@ export default class Profile extends Component {
         };
 
         return (
-            <View style={{ flexDirection: 'row' }} >
-                <View style={{ flex: 1, paddingTop: 30 }}>
+            <View style={{ flexDirection: 'column', paddingTop: 30, paddingBottom: 30 }} >
+                <View>
                     <TouchableOpacity onPress={this.handleOnPress}>
                         <Image style={styles.profilepic} source={{ uri: this.state.avatarUrl }} />
                     </TouchableOpacity>
@@ -217,7 +221,7 @@ export default class Profile extends Component {
                     <Text style={styles.details}>{this.state.currroom} | {this.state.matric}</Text>
                     <TouchableOpacity>
                         <Button bordered dark
-                            style={styles.editprofilebtn}
+                            style={styles.changpasswordbtn}
                             onPress={showDialog}>
                             <Text style={{ fontSize: 12, color: '#616161' }}>Change Password</Text>
                         </Button>
@@ -229,17 +233,19 @@ export default class Profile extends Component {
                             Please enter current password and new password.
                         </Dialog.Description>
                         <Dialog.Input
-                            placeholder="New Password" 
+                            placeholder="New Password"
                             secureTextEntry
-                            onChangeText={(inputText) => this.setState({password1: inputText})}/>
+                            onChangeText={(inputText) => this.setState({ password1: inputText })} />
                         <Dialog.Input
                             placeholder="Confirm New Password"
                             secureTextEntry
-                            onChangeText={(inputText) => this.setState({password2: inputText})}/>
+                            onChangeText={(inputText) => this.setState({ password2: inputText })} />
                         <Dialog.Button label="Cancel" onPress={handleCancel} />
                         <Dialog.Button label="Confirm" onPress={handleConfirm} />
                     </Dialog.Container>
+                </View>
 
+                <View>
                     <TouchableOpacity onPress={this.statusUpdate}>
                         <View style={{ flexDirection: 'row', paddingTop: 30, marginLeft: 50, marginRight: 50 }}>
                             <Text style={styles.statussubpage}>Status</Text>
@@ -247,11 +253,19 @@ export default class Profile extends Component {
                             <Arrow name="right" size={40} style={styles.arrow} />
                         </View>
                     </TouchableOpacity>
-
+                    
                     <TouchableOpacity onPress={this.viewCommunities}>
                         <View style={styles.orangeline}></View>
                         <View style={{ flexDirection: 'row', paddingTop: 8, marginLeft: 50, marginRight: 50 }}>
                             <Text style={styles.communitysubpage}>Communities</Text>
+                            <Arrow name="right" size={40} style={styles.arrow} />
+                        </View>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity onPress={this.viewContacts}>
+                        <View style={styles.orangeline}></View>
+                        <View style={{ flexDirection: 'row', paddingTop: 8, marginLeft: 50, marginRight: 50 }}>
+                            <Text style={styles.contactssubpage}>Important Contacts</Text>
                             <Arrow name="right" size={40} style={styles.arrow} />
                         </View>
                     </TouchableOpacity>
@@ -292,7 +306,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         alignSelf: 'center'
     },
-    editprofilebtn: {
+    changpasswordbtn: {
         width: 120,
         height: 27.5,
         alignSelf: 'center',
@@ -302,7 +316,7 @@ const styles = StyleSheet.create({
     },
     name: {
         alignSelf: 'center',
-        paddingTop: 30,
+        paddingTop: 15,
         fontSize: 20
     },
     details: {
@@ -313,8 +327,8 @@ const styles = StyleSheet.create({
     orangeline: {
         borderBottomColor: 'orange',
         borderBottomWidth: 1,
-        marginTop: 10,
-        marginBottom: 10,
+        marginTop: 8,
+        marginBottom: 8,
         marginLeft: 50,
         marginRight: 50
     },
@@ -333,6 +347,13 @@ const styles = StyleSheet.create({
         color: '#616161'
     },
     communitysubpage: {
+        flex: 9,
+        fontSize: 16,
+        justifyContent: 'flex-start',
+        color: '#616161',
+        marginTop: 9
+    },
+    contactssubpage: {
         flex: 9,
         fontSize: 16,
         justifyContent: 'flex-start',
