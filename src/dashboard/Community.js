@@ -11,21 +11,16 @@ import 'firebase/auth';
 export default class Community extends Component {
     state = {
         dashboard: {},
-        // presentdb???
     }
 
     componentDidMount() {
-        setInterval(() => {
-            firebase.database().ref('/dashboard').on('value', querySnapShot => {
-                let data = querySnapShot.val() ? querySnapShot.val() : {};
-                // console.log(Object.keys(querySnapShot.val()))
-                let dashboardItems = {...data};
-                // console.log(dashboardItems)
-                this.setState({
-                    dashboard: dashboardItems,
-                });
+        firebase.database().ref('/dashboard').on('value', querySnapShot => {
+            let data = querySnapShot.val() ? querySnapShot.val() : {};
+            let dashboardItems = {...data};
+            this.setState({
+            dashboard: dashboardItems,
             });
-        }, 5000);
+        });
     }
 
     componentWillUnmount() {
@@ -41,14 +36,27 @@ export default class Community extends Component {
     }
 
     helpTask = (key) => {
-        firebase.database().ref('dashboard/' + key).update({
+        var currRef = firebase.database().ref('dashboard/' + key)
+
+        currRef.update({
             isInProgress: true
         })
+
+        var taskData 
+        currRef.once('value', snapshot => {
+            taskData = snapshot.val()
+        })
+
+        var user = firebase.auth().currentUser;
+        var matric = user.displayName
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard').child(key).set(taskData)
+        
+        currRef.remove()
     }
 
-    completeTask = (key) => {
-        firebase.database().ref('dashboard/' + key).remove()
-    }
+    // completeTask = (key) => {
+    //     firebase.database().ref('dashboard/' + key).remove()
+    // }
 
     helpWithTaskButton = (key) => {
         const item = this.state.dashboard[key]
@@ -89,7 +97,6 @@ export default class Community extends Component {
                     <Text style={styles.title}>Current Help Needed</Text>
                     {dashboardKeys.length > 0 ? (
                         <View>
-                        {/* <ScrollView> */}
                         {
                             dashboardKeys.map((key) => (
                                 <View key = {key}  style = {styles.item}>
@@ -108,12 +115,10 @@ export default class Community extends Component {
                                 </View>
                             ))
                         }
-                        {/* </ScrollView> */}
                         </View>
                     ) : (
                         <View style={styles.empty}>
                             <Text style={{fontSize: 16, color: 'rgba(0,0,0,0.7)'}}>No one needs your help for now.</Text>
-                            {/* <Text style={{fontSize: 16, color: 'rgba(0,0,0,0.7)'}}>Thank you! :)</Text> */}
                         </View>
                     )}
                 </View>

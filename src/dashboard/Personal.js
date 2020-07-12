@@ -16,49 +16,26 @@ export default class Personal extends Component {
         groceriesText: '',
         othersText: '',
         dashboard: {},
-        // presentdb???
     }
 
-    
-
     componentDidMount() {
-        setInterval(() => {
-            var user = firebase.auth().currentUser;
-            var matric = user.displayName
+        var user = firebase.auth().currentUser;
+        var matric = user.displayName
 
-            var currDashboard = []
-
-            firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).on('value', snapshot => {
-                currDashboard = snapshot.val().dashboard ? snapshot.val().dashboard : [];
-            })
-
-            firebase.database().ref('/dashboard').on('value', querySnapShot => {
-                let data = querySnapShot.val() ? querySnapShot.val() : {};
-                // console.log(data)
-                let keys = Object.keys(data)
-                var key
-                // console.log(currKey)
-                for (key of keys) {
-                    // console.log(key)
-                    if (currDashboard.includes(key)) {
-                        // console.log(data[key])
-                        let dashboardItems = this.state.dashboard
-                        dashboardItems[key] = data[key]
-                        this.setState({
-                            dashboard: dashboardItems,
-                        });
-                    }
-                }
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard').on('value', querySnapShot => {
+            let data = querySnapShot.val() ? querySnapShot.val() : {};
+            let dashboardItems = {...data};
+            this.setState({
+                dashboard: dashboardItems,
             });
-        }, 5000);
+        });
     }
 
     componentWillUnmount() {
         var user = firebase.auth().currentUser;
         var matric = user.displayName
 
-        firebase.database().ref('/dashboard').off()
-        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric).off()
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/dashboard').off()
     }
 
     checkTaskProgress = (isInProgress) => {
@@ -106,6 +83,66 @@ export default class Personal extends Component {
         }
     }
 
+    undoHelp = (key) => {
+        Alert.alert(
+            'Alert',
+            'Would you like to undo the progress of this task?',
+            [
+                {text: 'Cancel', style: 'cancel'},
+                {text: 'Confirm', onPress: () => this.confirmUndoHelp(key), style: 'default'},
+            ]
+            // onpress(confirm) delete the task
+        );
+    }
+
+    confirmUndoHelp = (key) => {
+        var user = firebase.auth().currentUser;
+        var matric = user.displayName
+
+        var currRef = firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard/' + key)
+
+        currRef.update({
+            isInProgress: false
+        })
+
+        var taskData
+        currRef.once('value', snapshot => {
+            taskData = snapshot.val()
+        })
+
+        firebase.database().ref('dashboard/').child(key).set(taskData)
+
+        currRef.remove()
+    }
+
+    ownTask = (key) => {
+
+
+    }
+
+
+    otherTask = (key) => {
+        return (
+            <View key = {key}  style = {styles.item}>
+                <TouchableOpacity 
+                    style={styles.task} 
+                    onPress={() => this.helpWithTaskButton(key)}
+                    onLongPress={() => this.undoHelp(key)}>
+                    <View>
+                        <Image style={styles.profilepic} source={{ uri: this.state.dashboard[key].profilePicUrl }} />
+                    </View>
+                    <View>
+                        <Text style={styles.taskHeader}>{this.state.dashboard[key].name}</Text>
+                        <Text style={styles.taskBody}>{this.state.dashboard[key].task}</Text>
+                    </View>
+                    <View style={styles.taskProgress}>
+                        <Icon name='circle' size={45} style={this.checkTaskProgress(this.state.dashboard[key].isInProgress)}/>
+                    </View>
+                </TouchableOpacity>
+            </View>  
+        )   
+    }
+
     render() {
 
         let dashboardKeys = Object.keys(this.state.dashboard);
@@ -118,31 +155,31 @@ export default class Personal extends Component {
                     <Text style={styles.title}>Ongoing Activities</Text>
                     {dashboardKeys.length > 0 ? (
                         <View>
-                        {/* <ScrollView> */}
                         {
-                            dashboardKeys.map((key) => (
-                                <View key = {key}  style = {styles.item}>
-                                    <TouchableOpacity style={styles.task} onPress={() => this.helpWithTaskButton(key)}>
-                                        <View>
-                                            <Image style={styles.profilepic} source={{ uri: this.state.dashboard[key].profilePicUrl }} />
-                                        </View>
-                                        <View>
-                                            <Text style={styles.taskHeader}>{this.state.dashboard[key].name}</Text>
-                                            <Text style={styles.taskBody}>{this.state.dashboard[key].task}</Text>
-                                        </View>
-                                        <View style={styles.taskProgress}>
-                                            <Icon name='circle' size={45} style={this.checkTaskProgress(this.state.dashboard[key].isInProgress)}/>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            ))
+                            dashboardKeys.map((key) => 
+                                this.otherTask(key)
+                            // (
+                            //     <View key = {key}  style = {styles.item}>
+                            //         <TouchableOpacity style={styles.task} onPress={() => this.helpWithTaskButton(key)}>
+                            //             <View>
+                            //                 <Image style={styles.profilepic} source={{ uri: this.state.dashboard[key].profilePicUrl }} />
+                            //             </View>
+                            //             <View>
+                            //                 <Text style={styles.taskHeader}>{this.state.dashboard[key].name}</Text>
+                            //                 <Text style={styles.taskBody}>{this.state.dashboard[key].task}</Text>
+                            //             </View>
+                            //             <View style={styles.taskProgress}>
+                            //                 <Icon name='circle' size={45} style={this.checkTaskProgress(this.state.dashboard[key].isInProgress)}/>
+                            //             </View>
+                            //         </TouchableOpacity>
+                            //     </View>
+                            // )
+                            )
                         }
-                        {/* </ScrollView> */}
                         </View>
                     ) : (
                         <View style={styles.empty}>
                             <Text style={{fontSize: 16, color: 'rgba(0,0,0,0.7)'}}>You do not have any ongoing activities at the moment.</Text>
-                            {/* <Text style={{fontSize: 18}}>Thank you! :)</Text> */}
                         </View>
                     )}
                 </View>
@@ -173,7 +210,6 @@ const styles = StyleSheet.create({
     empty : {
         paddingHorizontal: 20,
         alignItems: 'flex-start', 
-        // paddingTop: 100
     },
     item: {
         justifyContent: 'space-between',

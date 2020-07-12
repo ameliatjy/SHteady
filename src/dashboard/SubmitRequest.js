@@ -31,30 +31,38 @@ export default class SubmitRequest extends Component {
             currroom = snapshot.val().room;
             currname = snapshot.val().name;
             currprofilepic = snapshot.val().profilePicUrl;
-            block = currroom.substring(0, 1);
+            // block = currroom.substring(0, 1);
         })
 
+        //need to save priority as a child to,,, check arrangement on personal
+        // set name of helper to be nil
+        
         var newRequest = firebase.database().ref('dashboard/').push();
         newRequest.setWithPriority({
+            matric: matric,
             name: currname,
             room: currroom,
             profilePicUrl: currprofilepic === 'default' ? 'https://firebasestorage.googleapis.com/v0/b/shteady-b81ed.appspot.com/o/defaultsheares.png?alt=media&token=95e0cee4-a5c0-4000-8e9b-2c258f87fe2d' : currprofilepic,
             task: currtask,
             addionalInfo: moreInfo,
             isInProgress: false,
-            block: block,
+            helper: null,
+            priority: priority
         }, priority)
 
         var key = newRequest.getKey()
-        var currDashboard = []
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard').child(key).setWithPriority({
+            matric: matric,
+            name: currname,
+            room: currroom,
+            profilePicUrl: currprofilepic === 'default' ? 'https://firebasestorage.googleapis.com/v0/b/shteady-b81ed.appspot.com/o/defaultsheares.png?alt=media&token=95e0cee4-a5c0-4000-8e9b-2c258f87fe2d' : currprofilepic,
+            task: currtask,
+            addionalInfo: moreInfo,
+            isInProgress: false,
+            helper: null,
+            priority: priority
+        }, priority)
 
-        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).on('value', function(snapshot) {
-            currDashboard = snapshot.val().dashboard ? snapshot.val().dashboard : [];
-        })
-        currDashboard.push(key)
-    
-        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).child('dashboard').set(currDashboard)
-        
 
         // delete tasks after a period of time
         // setTimeout(() => {
