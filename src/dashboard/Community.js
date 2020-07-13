@@ -52,45 +52,123 @@ export default class Community extends Component {
             helper: helper
         })
 
-        var taskData 
+        var taskData, helpedMatric
         currRef.once('value', snapshot => {
-            taskData = snapshot.val()
+            taskData = snapshot.val(),
+            helpedMatric = snapshot.val().matric
         })
 
         firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard').child(key).set(taskData)
         
+        console.warn(helpedMatric)
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ helpedMatric + '/dashboard').child(key).set(taskData)
+
         currRef.remove()
     }
 
-    // completeTask = (key) => {
-    //     firebase.database().ref('dashboard/' + key).remove()
-    // }
-
     helpWithTaskButton = (key) => {
         const item = this.state.dashboard[key]
-        if (item.isInProgress) {
+        var additionalInfo = item.additionalInfo == undefined ? '' : (item.additionalInfo + '\n')
+        Alert.alert(
+            // think of possible ways to change this
+            item.task,
+            additionalInfo + 
+            'Room Number: ' + item.room,
+            [
+                {text: 'Cancel', style: 'cancel'},
+                {text: 'Confirm', onPress: () => this.helpTask(key), style: 'default'},
+            ]
+            // onpress(confirm) change task taskinprogress:true
+        );
+    }
+
+    showMore = (key) => {
+        const item = this.state.dashboard[key]
+        var additionalInfo = item.additionalInfo == undefined ? '' : (item.additionalInfo + '\n')
+        Alert.alert(
+            'Still Looking For Help',
+            item.task + '\n' +
+            additionalInfo 
+            // 'Room Number: ' + item.room + '\n' + // dont need this right?
+        );
+    }
+
+    deleteTask = (key) => {
+        if (this.state.dashboard[key].isInProgress == true) {
+            null
+        } else {
             Alert.alert(
-                'Help On The Way!',
-                'Thank you for offering your help!\n' +
-                'Please confirm that the task has been completed!',
+                'Alert',
+                'Would you like to delete this task?',
                 [
                     {text: 'Cancel', style: 'cancel'},
-                    {text: 'Confirm', onPress: () => this.completeTask(key), style: 'default'},
+                    {text: 'Confirm', onPress: () => this.confirmDeleteTask(key), style: 'default'},
                 ]
                 // onpress(confirm) delete the task
             );
-        } else {
-            Alert.alert(
-                // think of possible ways to change this
-                item.task,
-                item.addionalInfo + '\n' + 'Room Number: ' + item.room,
-                [
-                    {text: 'Cancel', style: 'cancel'},
-                    {text: 'Confirm', onPress: () => this.helpTask(key), style: 'default'},
-                ]
-                // onpress(confirm) change task taskinprogress:true
-            );
         }
+        
+    }
+
+    confirmDeleteTask = (key) => {
+        var user = firebase.auth().currentUser;
+        var matric = user.displayName
+
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard/' + key).remove()
+
+        firebase.database().ref('dashboard/' + key).remove()
+    }
+
+    checkTaskOwner = (key) => {
+        var user = firebase.auth().currentUser;
+        var matric = user.displayName
+
+        if (this.state.dashboard[key].matric == matric) {
+            return this.ownTask(key)
+        } else {
+            return this.otherTask(key)
+        }
+    }
+
+    ownTask = (key) => {
+        return (
+            <View key = {key}  style = {styles.item}>
+                <TouchableOpacity 
+                    style={styles.task} 
+                    onPress={() => this.showMore(key)}
+                    onLongPress={() => this.deleteTask(key)}>
+                    <View>
+                        <Image style={styles.profilepic} source={{ uri: this.state.dashboard[key].profilePicUrl }} />
+                    </View>
+                    <View>
+                        <Text style={styles.taskHeader}>Me</Text>
+                        <Text style={styles.taskBody}>{this.state.dashboard[key].task}</Text>
+                    </View>
+                    <View style={styles.taskProgress}>
+                        <Icon name='circle' size={45} style={this.checkTaskProgress(this.state.dashboard[key].isInProgress)}/>
+                    </View>
+                </TouchableOpacity>
+            </View>  
+        )
+    }
+
+    otherTask = (key) => {
+        return (
+            <View key = {key}  style = {styles.item}>
+                <TouchableOpacity style={styles.task} onPress={() => this.helpWithTaskButton(key)}>
+                    <View>
+                        <Image style={styles.profilepic} source={{ uri: this.state.dashboard[key].profilePicUrl }} />
+                    </View>
+                    <View>
+                        <Text style={styles.taskHeader}>{this.state.dashboard[key].name}</Text>
+                        <Text style={styles.taskBody}>{this.state.dashboard[key].task}</Text>
+                    </View>
+                    <View style={styles.taskProgress}>
+                        <Icon name='circle' size={45} style={this.checkTaskProgress(this.state.dashboard[key].isInProgress)}/>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     render() {
@@ -104,26 +182,7 @@ export default class Community extends Component {
                 <View style={styles.taskCon}>
                     <Text style={styles.title}>Current Help Needed</Text>
                     {dashboardKeys.length > 0 ? (
-                        <View>
-                        {
-                            dashboardKeys.map((key) => (
-                                <View key = {key}  style = {styles.item}>
-                                    <TouchableOpacity style={styles.task} onPress={() => this.helpWithTaskButton(key)}>
-                                        <View>
-                                            <Image style={styles.profilepic} source={{ uri: this.state.dashboard[key].profilePicUrl }} />
-                                        </View>
-                                        <View>
-                                            <Text style={styles.taskHeader}>{this.state.dashboard[key].name}</Text>
-                                            <Text style={styles.taskBody}>{this.state.dashboard[key].task}</Text>
-                                        </View>
-                                        <View style={styles.taskProgress}>
-                                            <Icon name='circle' size={45} style={this.checkTaskProgress(this.state.dashboard[key].isInProgress)}/>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            ))
-                        }
-                        </View>
+                        <View>{dashboardKeys.map((key) => this.checkTaskOwner(key))}</View>
                     ) : (
                         <View style={styles.empty}>
                             <Text style={{fontSize: 16, color: 'rgba(0,0,0,0.7)'}}>No one needs your help for now.</Text>

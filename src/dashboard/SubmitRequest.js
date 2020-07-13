@@ -44,7 +44,7 @@ export default class SubmitRequest extends Component {
             room: currroom,
             profilePicUrl: currprofilepic === 'default' ? 'https://firebasestorage.googleapis.com/v0/b/shteady-b81ed.appspot.com/o/defaultsheares.png?alt=media&token=95e0cee4-a5c0-4000-8e9b-2c258f87fe2d' : currprofilepic,
             task: currtask,
-            addionalInfo: moreInfo,
+            additionalInfo: moreInfo,
             isInProgress: false,
             helper: null,
             priority: priority
@@ -57,7 +57,7 @@ export default class SubmitRequest extends Component {
             room: currroom,
             profilePicUrl: currprofilepic === 'default' ? 'https://firebasestorage.googleapis.com/v0/b/shteady-b81ed.appspot.com/o/defaultsheares.png?alt=media&token=95e0cee4-a5c0-4000-8e9b-2c258f87fe2d' : currprofilepic,
             task: currtask,
-            addionalInfo: moreInfo,
+            additionalInfo: moreInfo,
             isInProgress: false,
             helper: null,
             priority: priority
@@ -86,14 +86,18 @@ export default class SubmitRequest extends Component {
     }
      
     dabaoHandleConfirm = () => {
-        this.oneTimeTaskConfirmation('Please help me dabao commhall!', 'Food to daobao:\n' + this.state.dabaoText, 3, 43200000)
-        this.setState({ dabaoDialogVisible: false });
+        this.oneTimeTaskConfirmation('Please help me dabao commhall!', this.state.dabaoText, 3, 43200000)
+        this.setState({ 
+            dabaoDialogVisible: false, 
+            dabaoText: ''
+        });
     }
      
     dabaoHandleClose = () => {
-        // The user has pressed the "Delete" button, so here you can do your own logic.
-        // ...Your logic
-        this.setState({ dabaoDialogVisible: false });
+        this.setState({ 
+            dabaoDialogVisible: false,
+            dabaoText: '' 
+        });
     }
 
     showDatetimePicker = () => {
@@ -128,13 +132,19 @@ export default class SubmitRequest extends Component {
      
     groceriesHandleConfirm = () => {
         this.oneTimeTaskConfirmation('Please help me get groceries!', this.state.groceriesText, 5, 172800000)
-        this.setState({ groceriesDialogVisible: false });
+        this.setState({ 
+            groceriesDialogVisible: false,
+            groceriesText: '' 
+        });
     }
      
     groceriesHandleClose = () => {
         // The user has pressed the "Delete" button, so here you can do your own logic.
         // ...Your logic
-        this.setState({ groceriesDialogVisible: false });
+        this.setState({ 
+            groceriesDialogVisible: false,
+            groceriesText: ''
+        });
     }
 
     othersShowDialog = () => {
@@ -143,13 +153,17 @@ export default class SubmitRequest extends Component {
      
     othersHandleConfirm = () => {
         this.oneTimeTaskConfirmation('Please help me with something!', this.state.othersText, 6, 172800000)
-        this.setState({ othersDialogVisible: false });
+        this.setState({ 
+            othersDialogVisible: false,
+            othersText: ''
+        });
     }
      
     othersHandleClose = () => {
-        // The user has pressed the "Delete" button, so here you can do your own logic.
-        // ...Your logic
-        this.setState({ othersDialogVisible: false });
+        this.setState({ 
+            othersDialogVisible: false,
+            othersText: ''
+        });
     }
 
     render() {
