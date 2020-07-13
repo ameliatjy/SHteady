@@ -46,22 +46,30 @@ export default class Personal extends Component {
         }
     }
 
-    helpTask = (key) => {
-        firebase.database().ref('dashboard/' + key).update({
-            isInProgress: true
-        })
-    }
+    // helpTask = (key) => {
+    //     firebase.database().ref('dashboard/' + key).update({
+    //         isInProgress: true
+    //     })
+    // }
 
     completeTask = (key) => {
-        firebase.database().ref('dashboard/' + key).remove()
+        var helpingMatric = this.state.dashboard[key].matric
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ helpingMatric + '/dashboard/' + key).remove()
+
+        var user = firebase.auth().currentUser;
+        var currMatric = user.displayName
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ currMatric + '/dashboard/' + key).remove()
     }
 
     helpWithTaskButton = (key) => {
         const item = this.state.dashboard[key]
-        if (item.isInProgress) {
+        // if (item.isInProgress) {
+            //change the alert
             Alert.alert(
                 'Help On The Way!',
                 'Thank you for offering your help!\n' +
+                item.task + '\n' +
+                item.addionalInfo + '\n' + 'Room Number: ' + item.room + '\n' +
                 'Please confirm that the task has been completed!',
                 [
                     {text: 'Cancel', style: 'cancel'},
@@ -69,18 +77,19 @@ export default class Personal extends Component {
                 ]
                 // onpress(confirm) delete the task
             );
-        } else {
-            Alert.alert(
-                // think of possible ways to change this
-                item.task,
-                item.addionalInfo + '\n' + 'Room Number: ' + item.room,
-                [
-                    {text: 'Cancel', style: 'cancel'},
-                    {text: 'Confirm', onPress: () => this.helpTask(key), style: 'default'},
-                ]
-                // onpress(confirm) change task taskinprogress:true
-            );
-        }
+        // } 
+        // else {
+        //     Alert.alert(
+        //         // think of possible ways to change this
+        //         item.task,
+        //         item.addionalInfo + '\n' + 'Room Number: ' + item.room,
+        //         [
+        //             {text: 'Cancel', style: 'cancel'},
+        //             {text: 'Confirm', onPress: () => this.helpTask(key), style: 'default'},
+        //         ]
+        //         // onpress(confirm) change task taskinprogress:true
+        //     );
+        // }
     }
 
     undoHelp = (key) => {
@@ -102,7 +111,8 @@ export default class Personal extends Component {
         var currRef = firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard/' + key)
 
         currRef.update({
-            isInProgress: false
+            isInProgress: false,
+            helper: null
         })
 
         var taskData
@@ -115,11 +125,86 @@ export default class Personal extends Component {
         currRef.remove()
     }
 
-    ownTask = (key) => {
-
-
+    showMore = (key) => {
+        const item = this.state.dashboard[key]
+        var additionalInfo = item.addionalInfo == '' ? '' : (item.addionalInfo + '\n')
+        if (item.isInProgress == true) {
+            Alert.alert(
+                'Help On The Way!',
+                item.task + '\n' +
+                additionalInfo +
+                // 'Room Number: ' + item.room + '\n' + // dont need this right?
+                'Task Helped By: ' + item.helper //change this
+            );
+        } else {
+            Alert.alert(
+                'Still Looking For Help',
+                item.task + '\n' +
+                additionalInfo 
+                // 'Room Number: ' + item.room + '\n' + // dont need this right?
+            );
+        }
     }
 
+    deleteTask = (key) => {
+        if (this.state.dashboard[key].isInProgress == true) {
+            null
+        } else {
+            Alert.alert(
+                'Alert',
+                'Would you like to delete this task?',
+                [
+                    {text: 'Cancel', style: 'cancel'},
+                    {text: 'Confirm', onPress: () => this.confirmDeleteTask(key), style: 'default'},
+                ]
+                // onpress(confirm) delete the task
+            );
+        }
+        
+    }
+
+    confirmDeleteTask = (key) => {
+        var user = firebase.auth().currentUser;
+        var matric = user.displayName
+
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard/' + key).remove()
+
+        firebase.database().ref('dashboard/' + key).remove()
+    }
+
+    checkTaskOwner = (key) => {
+        var user = firebase.auth().currentUser;
+        var matric = user.displayName
+
+        if (this.state.dashboard[key].matric == matric) {
+            return this.ownTask(key)
+        } else {
+            return this.otherTask(key)
+        }
+    }
+
+    ownTask = (key) => {
+        return (
+            <View key = {key}  style = {styles.item}>
+                <TouchableOpacity 
+                    style={styles.task} 
+                    onPress={() => this.showMore(key)}
+                    onLongPress={() => this.deleteTask(key)}>
+                    <View>
+                        <Image style={styles.profilepic} source={{ uri: this.state.dashboard[key].profilePicUrl }} />
+                    </View>
+                    <View>
+                        <Text style={styles.taskHeader}>Me</Text>
+                        <Text style={styles.taskBody}>{this.state.dashboard[key].task}</Text>
+                    </View>
+                    <View style={styles.taskProgress}>
+                        <Icon name='circle' size={45} style={this.checkTaskProgress(this.state.dashboard[key].isInProgress)}/>
+                    </View>
+                </TouchableOpacity>
+            </View>  
+        )   
+
+    }
 
     otherTask = (key) => {
         return (
@@ -157,7 +242,7 @@ export default class Personal extends Component {
                         <View>
                         {
                             dashboardKeys.map((key) => 
-                                this.otherTask(key)
+                                this.checkTaskOwner(key)
                             // (
                             //     <View key = {key}  style = {styles.item}>
                             //         <TouchableOpacity style={styles.task} onPress={() => this.helpWithTaskButton(key)}>

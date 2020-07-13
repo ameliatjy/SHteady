@@ -36,10 +36,20 @@ export default class Community extends Component {
     }
 
     helpTask = (key) => {
+
+        var user = firebase.auth().currentUser;
+        var matric = user.displayName
+
+        var helper
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).once('value', snapshot => {
+            helper = snapshot.val().name
+        })
+
         var currRef = firebase.database().ref('dashboard/' + key)
 
         currRef.update({
-            isInProgress: true
+            isInProgress: true,
+            helper: helper
         })
 
         var taskData 
@@ -47,8 +57,6 @@ export default class Community extends Component {
             taskData = snapshot.val()
         })
 
-        var user = firebase.auth().currentUser;
-        var matric = user.displayName
         firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard').child(key).set(taskData)
         
         currRef.remove()
