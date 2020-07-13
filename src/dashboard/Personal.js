@@ -19,8 +19,23 @@ export default class Personal extends Component {
     }
 
     componentDidMount() {
+
         var user = firebase.auth().currentUser;
         var matric = user.displayName
+
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard').on('value', querySnapShot => {
+            let data = querySnapShot.val() ? querySnapShot.val() : {};
+            let keys = Object.keys(data)
+            
+            var currTime = new Date().getTime()
+
+            var key
+            for (key of keys) {
+                if (data[key].autoDeleteAt < currTime) {
+                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard/' + key).remove()
+                }
+            }
+        })
 
         firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard').on('value', querySnapShot => {
             let data = querySnapShot.val() ? querySnapShot.val() : {};
@@ -57,7 +72,7 @@ export default class Personal extends Component {
 
     helpWithTaskButton = (key) => {
         const item = this.state.dashboard[key]
-        var additionalInfo = item.additionalInfo == undefined ? '' : (item.additionalInfo + '\n')
+        var additionalInfo = item.additionalInfo == '' ? item.additionalInfo : (item.additionalInfo + '\n')
         Alert.alert(
             'Help On The Way!',
             'Thank you for offering your help!\n\n' +
@@ -95,21 +110,24 @@ export default class Personal extends Component {
             helper: null
         })
 
-        var taskData, helpedMatric
+        var taskData, helpedMatric, priority
         currRef.once('value', snapshot => {
             taskData = snapshot.val(),
             helpedMatric = snapshot.val().matric
+            priority = snapshot.val().priority
         })
 
-        firebase.database().ref('dashboard/').child(key).set(taskData)
-        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ helpedMatric + '/dashboard').child(key).set(taskData)
+        firebase.database().ref('dashboard/').child(key).setWithPriority(taskData, priority)
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ helpedMatric + '/dashboard').child(key).setWithPriority(taskData, priority)
 
         currRef.remove()
     }
 
     showMore = (key) => {
         const item = this.state.dashboard[key]
-        var additionalInfo = item.additionalInfo == undefined ? '' : (item.additionalInfo + '\n')
+        
+        var additionalInfo = item.additionalInfo == '' ? item.additionalInfo : (item.additionalInfo + '\n')
+
         if (item.isInProgress == true) {
             Alert.alert(
                 'Help On The Way!',

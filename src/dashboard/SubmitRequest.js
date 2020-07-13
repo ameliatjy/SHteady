@@ -8,8 +8,6 @@ import moment from 'moment';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
-
-
 export default class SubmitRequest extends Component {
 
     state = {
@@ -20,6 +18,11 @@ export default class SubmitRequest extends Component {
         dabaoText: '',
         groceriesText: '',
         othersText: '',
+    }
+
+    addMinutes =  (minutes)  => {
+        var curr = new Date()
+        return new Date(curr.getTime() + minutes*60000).getTime();
     }
 
     oneTimeTaskConfirmation = (currtask, moreInfo, priority, autoDelete) => {
@@ -33,9 +36,6 @@ export default class SubmitRequest extends Component {
             currprofilepic = snapshot.val().profilePicUrl;
             // block = currroom.substring(0, 1);
         })
-
-        //need to save priority as a child to,,, check arrangement on personal
-        // set name of helper to be nil
         
         var newRequest = firebase.database().ref('dashboard/').push();
         newRequest.setWithPriority({
@@ -47,7 +47,8 @@ export default class SubmitRequest extends Component {
             additionalInfo: moreInfo,
             isInProgress: false,
             helper: null,
-            priority: priority
+            priority: priority,
+            autoDeleteAt: autoDelete
         }, priority)
 
         var key = newRequest.getKey()
@@ -60,23 +61,19 @@ export default class SubmitRequest extends Component {
             additionalInfo: moreInfo,
             isInProgress: false,
             helper: null,
-            priority: priority
+            priority: priority,
+            autoDeleteAt: autoDelete
         }, priority)
-
-
-        // delete tasks after a period of time
-        // setTimeout(() => {
-        //     firebase.database().ref('dashboard/').child(key).remove()
-        // }, autoDelete);
     }
 
     closeMyWindowsButton() {
+        var autoDelete = this.addMinutes(60)
         Alert.alert(
             'Send Help Please!',
             'Please help me close my windows!!!',
             [
                 {text: 'Cancel', style: 'cancel'},
-                {text: 'Confirm', onPress: () => this.oneTimeTaskConfirmation('Please close my windows!', '', 1, 3600000), style: 'default'},
+                {text: 'Confirm', onPress: () => this.oneTimeTaskConfirmation('Please close my windows!', '', 1, autoDelete), style: 'default'},
             ]
         );
     }
@@ -86,7 +83,8 @@ export default class SubmitRequest extends Component {
     }
      
     dabaoHandleConfirm = () => {
-        this.oneTimeTaskConfirmation('Please help me dabao commhall!', this.state.dabaoText, 3, 43200000)
+        var autoDelete = this.addMinutes(1440)
+        this.oneTimeTaskConfirmation('Please help me dabao commhall!',  this.state.dabaoText, 3, autoDelete)
         this.setState({ 
             dabaoDialogVisible: false, 
             dabaoText: ''
@@ -109,19 +107,19 @@ export default class SubmitRequest extends Component {
     }
      
     wakeupHandleConfirm = (datetime) => {
-        var difference = moment(datetime).diff(moment(firebase.database.ServerValue.TIMESTAMP))
-        //console.warn(difference)
-        this.oneTimeTaskConfirmation('Please wake me up!', moment(datetime).format('llll'), 4, difference)
+        var autoDelete = datetime.getTime()
+        this.oneTimeTaskConfirmation('Please wake me up!', moment(datetime).format('llll'), 4, autoDelete)
         this.hideDatetimePicker();
     }
 
     hideAirconButton() {
+        var autoDelete = this.addMinutes(60)
         Alert.alert(
             'Send Help Please!',
             'Halim coming!!! Help me hide my aircon PLEASE!!!',
             [
                 {text: 'Cancel', style: 'cancel'},
-                {text: 'Confirm', onPress: () => this.oneTimeTaskConfirmation('Please hide my aircon!', '', 2, 1800000), style: 'default'},
+                {text: 'Confirm', onPress: () => this.oneTimeTaskConfirmation('Please hide my aircon!', '', 2, autoDelete), style: 'default'},
             ]
         );
     }
@@ -131,7 +129,8 @@ export default class SubmitRequest extends Component {
     }
      
     groceriesHandleConfirm = () => {
-        this.oneTimeTaskConfirmation('Please help me get groceries!', this.state.groceriesText, 5, 172800000)
+        var autoDelete = this.addMinutes(2880)
+        this.oneTimeTaskConfirmation('Please help me get groceries!', this.state.groceriesText, 5, autoDelete)
         this.setState({ 
             groceriesDialogVisible: false,
             groceriesText: '' 
@@ -139,8 +138,6 @@ export default class SubmitRequest extends Component {
     }
      
     groceriesHandleClose = () => {
-        // The user has pressed the "Delete" button, so here you can do your own logic.
-        // ...Your logic
         this.setState({ 
             groceriesDialogVisible: false,
             groceriesText: ''
@@ -152,7 +149,8 @@ export default class SubmitRequest extends Component {
     }
      
     othersHandleConfirm = () => {
-        this.oneTimeTaskConfirmation('Please help me with something!', this.state.othersText, 6, 172800000)
+        var autoDelete = this.addMinutes(2880)
+        this.oneTimeTaskConfirmation('Please help me with something!', this.state.othersText, 6, autoDelete)
         this.setState({ 
             othersDialogVisible: false,
             othersText: ''
@@ -211,7 +209,6 @@ export default class SubmitRequest extends Component {
                             onConfirm={this.wakeupHandleConfirm}
                             onCancel={this.hideDatetimePicker}
                             date={new Date()}
-                            // minimumDate={new Date(moment().utcOffset('+08:00').format('MMMM Do YYYY, h:mm:ss a'))}
                         />
                     </View>
 
