@@ -33,6 +33,8 @@ export default class Personal extends Component {
             for (key of keys) {
                 if (data[key].autoDeleteAt < currTime) {
                     firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric + '/dashboard/' + key).remove()
+                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ data[key].matric + '/dashboard/' + key).remove()
+                    firebase.database().ref('dashboard/' + key).remove()
                 }
             }
         })
