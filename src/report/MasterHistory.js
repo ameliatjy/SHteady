@@ -38,6 +38,25 @@ export default class MasterHistory extends Component {
         }
     }
 
+    handleUndo = (key) => {
+        var status = this.state.history[key].status
+        if (status == 'IN PROGRESS') {
+            Alert.alert(
+                'Status: In Progress',
+                'Do you wish to undo the status of this report?\n',
+                [
+                    {text: 'Cancel', style: 'cancel'},
+                    {text: 'Confirm', onPress: () => this.confirmUndo(key), style: 'default'},
+                ]
+            )
+        }
+    }
+
+    confirmUndo = (key) => {
+        firebase.database().ref('report/' + key).child('status').set('RECEIVED')
+        firebase.database().ref('report/' + key).child('lastUpdatedTime').set(firebase.database.ServerValue.TIMESTAMP)
+    }
+
     handleReport = (key) => {
         var status = this.state.history[key].status
         if (status == 'RECEIVED') {
@@ -82,8 +101,28 @@ export default class MasterHistory extends Component {
         var status = this.state.history[key].status
         if (status == 'RECEIVED') {
             firebase.database().ref('report/' + key).child('status').set('IN PROGRESS')
+            firebase.database().ref('report/' + key).child('lastUpdatedTime').set(firebase.database.ServerValue.TIMESTAMP)
         } else if (status == 'IN PROGRESS') {
             firebase.database().ref('report/' + key).child('status').set('COMPLETED')
+            firebase.database().ref('report/' + key).child('lastUpdatedTime').set(firebase.database.ServerValue.TIMESTAMP)
+        }
+    }
+
+    // getName = (key) => {
+    //     // gsos does not get data fast enough 
+    //     var matric = this.state.history[key].reportSubmittedBy
+    //     var name 
+    //     Promise.all(firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric).on('value', function(snapshot) {
+    //         name = snapshot.val().name
+    //     }))
+    //     return name
+    // }
+
+    nullSentence = (type) => {
+        if (type == 'RECEIVED') {
+            return 'No new reports have been received.'
+        } else if (type == 'IN PROGRESS') {
+            return 'There are no reports currently in progress.'
         }
     }
 
@@ -91,13 +130,14 @@ export default class MasterHistory extends Component {
 
         // need to reorder based on timestamp desc
 
-        firebase.database().ref('/report').on('value', querySnapShot => {
+        firebase.database().ref('/report').orderByChild('status').equalTo(this.props.type).on('value', querySnapShot => {
             let data = querySnapShot.val() ? querySnapShot.val() : {};
             let historyItems = {...data}
             this.setState({
                 history: historyItems
             })
         });
+
     }
 
     componentWillUnmount() {
@@ -116,31 +156,29 @@ export default class MasterHistory extends Component {
                         {
                             historyKeys.map((key) => (
                                 <View key = {key}  style = {styles.item}>
-                                    <TouchableOpacity onPress={() => this.handleReport(key)}>
-                                        {/* <View> */}
+                                    <TouchableOpacity onPress={() => this.handleReport(key)} onLongPress={() => this.handleUndo(key)}>
                                             <View style={styles.status}>
-                                                <Text style={styles.taskHeader}>{this.convertTime(this.state.history[key].time)}</Text>
-                                                {/* <IconEntypo name='location-pin' size={20} style={{color:'blue', marginRight:10}}/> */}
+                                                <Text style={styles.taskHeader}>{this.convertTime(this.state.history[key].timeSubmitted)}</Text>
                                                 <View style={this.statusCon(this.state.history[key].status)}>
                                                     <Text style={{color: 'white', fontWeight:'500', fontSize:16}}>{this.state.history[key].status}</Text>
                                                 </View>
                                             </View>
                                             <View style={styles.histDetails}>
                                                 <IconEntypo name='location-pin' size={20} style={{color:'rgb(0, 128, 129)', marginRight:10}}/>
-                                                {/* <Text style={styles.taskBody}>{this.brief(this.state.history[key].location)}</Text> */}
                                                 <Text style={styles.taskBody}>{this.state.history[key].location}</Text>
                                             </View>
                                             <View style={styles.histDetails}>
                                                 <IconMat name='report-problem' size={20} style={{color:'#fed000', marginRight:10}}/>
-                                                {/* <Text style={styles.taskBody}>{this.brief(this.state.history[key].problem)}</Text> */}
                                                 <Text style={styles.taskBody}>{this.state.history[key].problem}</Text>
                                             </View>
                                             <View style={styles.histDetails}>
                                                 <IconMat name='more' size={20} style={{color:'rgba(76, 81, 120, 0.6)', marginRight:10}}/>
-                                                {/* <Text style={styles.taskBody}>{this.state.history[key].otherDetails == '' ? 'No additional details' : this.brief(this.state.history[key].otherDetails)}</Text> */}
                                                 <Text style={styles.taskBody}>{this.state.history[key].otherDetails == '' ? 'No additional details' : this.state.history[key].otherDetails}</Text>
                                             </View>
-                                        {/* </View> */}
+                                            {/* <View style={styles.histDetails}>
+                                                <IconMat name='person' size={20} style={{color:'rgba(0, 0, 0, 0.8)', marginRight:10}}/>
+                                                <Text style={styles.taskBody}>{this.getName(key)}</Text>
+                                            </View> */}
                                     </TouchableOpacity>
                                 </View>
                             ))
@@ -149,7 +187,7 @@ export default class MasterHistory extends Component {
                         
                     ) : (
                         <View style={styles.empty}>
-                            <Text style={{fontSize: 18}}>There are no previous fault reports made by you!</Text>
+                            <Text style={{fontSize: 18}}>{this.nullSentence(this.props.type)}</Text>
                         </View>
                     )}
             </View>

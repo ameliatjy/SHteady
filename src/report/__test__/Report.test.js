@@ -2,10 +2,14 @@ import React from 'react';
 import renderer from 'react-test-renderer'
 
 import History from '../History';
+import MasterHistory from '../MasterHistory'
+import ReceivedHistory from '../ReceivedHistory'
+
 
 //import firebase from 'firebase/app';
 import 'firebase/database'
 import 'firebase/auth'
+import SubmitReport from '../SubmitReport';
 
 const firebase = require('firebase');
 //const admin = require('firebase-admin');
@@ -25,6 +29,6 @@ firebase.initializeApp(firebaseConfig);
 jest.useFakeTimers();
 
 test('Renders snapshot as expected', () => {
-    const tree = renderer.create(<History />).toJSON();
+    const tree = renderer.create(<ReceivedHistory/>).toJSON();
     expect(tree).toMatchSnapshot();
 });

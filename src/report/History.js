@@ -8,27 +8,14 @@ import IconMat from 'react-native-vector-icons/MaterialIcons'
 import firebase from 'firebase/app';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default class History extends Component {
-
-    state = {
-        history: {}
-    }
-
-    convertTime = (timestamp) => {
+const functions = {
+    add : (num1, num2) => {
+        return num1 + num2
+    },
+    convertTime : (timestamp) => {
         return moment(new Date(timestamp)).format('lll');
-    }
-
-    brief = (text) => {
-        var lines = text.split(/\r\n|\r|\n/).length
-        if (lines > 1) {
-            var firstline = text.split('\n')[0]
-            return firstline.substring(0,40)+'...'
-        } else {
-            return text.length > 45 ? text.substring(0,42)+'...' : text
-        }
-    }
-
-    statusCon = (status) => {
+    },
+    statusCon : (status) => {
         if (status == 'RECEIVED') {
             return styles.statusReceived
         } else if (status == 'IN PROGRESS') {
@@ -37,6 +24,17 @@ export default class History extends Component {
             return styles.statusCompleted
         }
     }
+}
+
+// for testing purposes
+// module.exports = functions
+
+
+export default class History extends Component {
+
+    state = {
+        history: {}
+    }
 
     componentDidMount() {
 
@@ -44,11 +42,10 @@ export default class History extends Component {
 
 
         var user = firebase.auth().currentUser;
-
         var matric = user.displayName
+
         var currReports = []
         firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).on('value', function(snapshot) {
-                // curremail = snapshot.val().email;
             currReports = snapshot.val().submittedReports ? snapshot.val().submittedReports : [];
         })
 
@@ -88,32 +85,24 @@ export default class History extends Component {
                         {
                             historyKeys.map((key) => (
                                 <View key = {key}  style = {styles.item}>
-                                    {/* <TouchableOpacity> */}
-                                        {/* <View> */}
                                             <View style={styles.status}>
-                                                <Text style={styles.taskHeader}>{this.convertTime(this.state.history[key].time)}</Text>
-                                                {/* <IconEntypo name='location-pin' size={20} style={{color:'blue', marginRight:10}}/> */}
-                                                <View style={this.statusCon(this.state.history[key].status)}>
+                                                <Text style={styles.taskHeader}>{functions.convertTime(this.state.history[key].timeSubmitted)}</Text>
+                                                <View style={functions.statusCon(this.state.history[key].status)}>
                                                     <Text style={{color: 'white', fontWeight:'700', fontSize:16}}>{this.state.history[key].status}</Text>
                                                 </View>
                                             </View>
                                             <View style={styles.histDetails}>
                                                 <IconEntypo name='location-pin' size={20} style={{color: 'rgb(0, 128, 129)', marginRight:10}}/>
-                                                {/* <Text style={styles.taskBody}>{this.brief(this.state.history[key].location)}</Text> */}
                                                 <Text style={styles.taskBody}>{this.state.history[key].location}</Text>
                                             </View>
                                             <View style={styles.histDetails}>
                                                 <IconMat name='report-problem' size={20} style={{color:'#fed000', marginRight:10}}/>
-                                                {/* <Text style={styles.taskBody}>{this.brief(this.state.history[key].problem)}</Text> */}
                                                 <Text style={styles.taskBody}>{this.state.history[key].problem}</Text>
                                             </View>
                                             <View style={styles.histDetails}>
                                                 <IconMat name='more' size={20} style={{color:'rgba(76, 81, 120, 0.6)', marginRight:10}}/>
-                                                {/* <Text style={styles.taskBody}>{this.state.history[key].otherDetails == '' ? 'No additional details' : this.brief(this.state.history[key].otherDetails)}</Text> */}
                                                 <Text style={styles.taskBody}>{this.state.history[key].otherDetails == '' ? 'No additional details' : this.state.history[key].otherDetails}</Text>
                                             </View>
-                                        {/* </View> */}
-                                    {/* </TouchableOpacity> */}
                                 </View>
                             ))
                         }
