@@ -327,17 +327,25 @@ export default class Meals extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <TouchableOpacity onPress={this.donateMeal}>
-                    <Image source={require('../images/donatemeal.png')}
-                        style={styles.circlebtns} />
-                    <Button title="Donate Your Meal" onPress={this.donateMeal} color='#616161' />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.secondMeal}>
-                    <Image source={require('../images/secondserving.png')}
-                        style={styles.circlebtns} />
-                    <Button title="Second Serving Plz..." onPress={this.secondMeal} color='#616161' />
-                </TouchableOpacity>
-            </View>
+                <View style={{ flexDirection: 'row', paddingTop: 5, flex: 9 }} >
+                    <View style={{ justifyContent: 'flex-end' }}>
+                        <TouchableOpacity onPress={this.donateMeal}>
+                            <Image source={require('../images/donatemeal.png')}
+                                style={styles.circlebtns} />
+                            <Button title="Donate Your Meal" onPress={this.donateMeal} color='#616161' />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{ flexDirection: 'row', paddingTop: 5, flex: 9 }} >
+                    <View style={{ justifyContent: 'flex-end' }}>
+                        <TouchableOpacity onPress={this.secondMeal}>
+                            <Image source={require('../images/secondserving.png')}
+                                style={styles.circlebtns} />
+                            <Button title="Second Serving Plz..." onPress={this.secondMeal} color='#616161' />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View >
         );
     }
 }
@@ -367,8 +375,8 @@ const styles = StyleSheet.create({
         color: '#616161'
     },
     circlebtns: {
-        width: 150,
-        height: 150,
+        width: 140,
+        height: 140,
         alignSelf: 'center'
     }
 });
