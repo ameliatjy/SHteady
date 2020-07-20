@@ -20,6 +20,7 @@ export default class Meals extends Component {
         matric: null,
         mealcredit: null,
         mealresettime: null,
+        resetdonationtime: null,
     }
 
     viewMenu = () => {
@@ -227,6 +228,7 @@ export default class Meals extends Component {
         let self = this;
         unsubscribe = firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
+                // reset meal credit
                 self.setState({ matric: user.displayName })
                 firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/').child(user.displayName).on('value', function (snapshot) {
                     self.setState({ mealcredit: snapshot.val().mealcredit })
@@ -296,6 +298,70 @@ export default class Meals extends Component {
                             }
                         }
                     }
+                } else {
+                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealcredit').set(0)
+                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealresettime').set(timestamp);
+                }
+
+                // reset donated meals counter and array: should be done when first person log in
+                firebase.database().ref('resetdonationtime').on('value', function (snapshot) {
+                    if (snapshot.exists()) {
+                        self.setState({ resetdonationtime: snapshot.val() })
+                    } else {
+                        self.setState({ resetdonationtime: 0 }) // when app just launch
+                    }
+                    while (self.state.resetdonationtime == null) {
+                        setTimeout(function () { }, 3000);
+                        console.log("getting donationtime");
+                    }
+                })
+
+                if (Number(hours) >= 7 && Number(hours) <= 11) {
+                    if (self.state.resetdonationtime === 0) { // array haven't been reset
+                        firebase.database().ref('resetdonationtime').set(timestamp);
+                        firebase.database().ref('mealsdonatedfrom').set(0);
+                        firebase.database().ref('donatedmeals').set(0);
+                    } else {
+                        var lastdonationresetdate = self.state.resetdonationtime.substring(0, 8);
+                        var lastdonationresethour = self.state.resetdonationtime.substring(9, 11);
+                        if (currdate > lastdonationresetdate) { // need to reset
+                            firebase.database().ref('resetdonationtime').set(timestamp);
+                            firebase.database().ref('mealsdonatedfrom').set(0);
+                            firebase.database().ref('donatedmeals').set(0);
+                        } else {
+                            if (Number(lastdonationresethour) >= 7 && Number(lastdonationresethour) <= 11) {
+                            } else {
+                                firebase.database().ref('resetdonationtime').set(timestamp);
+                                firebase.database().ref('mealsdonatedfrom').set(0);
+                                firebase.database().ref('donatedmeals').set(0);
+                            }
+                        }
+                    }
+                } else if (Number(hours) >= 17 && Number(hours) <= 22) { // dinner time
+                    if (self.state.resetdonationtime === 0) { // array haven't been reset
+                        firebase.database().ref('resetdonationtime').set(timestamp);
+                        firebase.database().ref('mealsdonatedfrom').set(0);
+                        firebase.database().ref('donatedmeals').set(0);
+                    } else {
+                        var lastdonationresetdate = self.state.resetdonationtime.substring(0, 8);
+                        var lastdonationresethour = self.state.resetdonationtime.substring(9, 11);
+                        if (currdate > lastdonationresetdate) { // need to reset
+                            firebase.database().ref('resetdonationtime').set(timestamp);
+                            firebase.database().ref('mealsdonatedfrom').set(0);
+                            firebase.database().ref('donatedmeals').set(0);
+                        } else {
+                            if (Number(lastdonationresethour) >= 17 && Number(lastdonationresethour) <= 22) {
+                            } else {
+                                firebase.database().ref('resetdonationtime').set(timestamp);
+                                firebase.database().ref('mealsdonatedfrom').set(0);
+                                firebase.database().ref('donatedmeals').set(0);
+                            }
+                        }
+                    }
+                } else {
+                    firebase.database().ref('resetdonationtime').set(timestamp);
+                    firebase.database().ref('mealsdonatedfrom').set(0);
+                    firebase.database().ref('donatedmeals').set(0);
                 }
             }
         })
