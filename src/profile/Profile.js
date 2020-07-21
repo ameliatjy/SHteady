@@ -212,7 +212,7 @@ export default class Profile extends Component {
         };
 
         return (
-            <View style={{ flexDirection: 'column', paddingTop: 30, paddingBottom: 30 }} >
+            <View style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20 }} >
                 <View>
                     <TouchableOpacity onPress={this.handleOnPress}>
                         <Image style={styles.profilepic} source={{ uri: this.state.avatarUrl }} />
@@ -301,8 +301,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     profilepic: {
-        width: 200,
-        height: 200,
+        width: 180,
+        height: 180,
         borderRadius: 100,
         alignSelf: 'center'
     },
@@ -347,14 +347,14 @@ const styles = StyleSheet.create({
         color: '#616161'
     },
     communitysubpage: {
-        flex: 9,
+        flex: 6,
         fontSize: 16,
         justifyContent: 'flex-start',
         color: '#616161',
         marginTop: 9
     },
     contactssubpage: {
-        flex: 9,
+        flex: 6,
         fontSize: 16,
         justifyContent: 'flex-start',
         color: '#616161',

@@ -53,18 +53,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: Constants.statusBarHeight,
+        marginBottom: 10,
         marginHorizontal: 16
     },
     item: {
         backgroundColor: "#ffd4b3",
-        padding: 20,
+        paddingVertical: 20,
+        paddingLeft: 25,
         marginVertical: 8,
-        borderRadius: 5
+        borderRadius: 10
     },
     header: {
         fontSize: 18,
+        fontWeight: 'bold'
     },
     title: {
-        fontSize: 12
+        fontSize: 14,
     }
 });

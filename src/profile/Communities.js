@@ -24,7 +24,8 @@ export default class Communities extends Component {
     mymatric = firebase.auth().currentUser.displayName;
 
     state = {
-        groups: [],
+        groups: [], //e.g. Sports Management Board
+        groupsById: [], //e.g. ccasmb
         activeSections: [],
         members: []
     }
@@ -45,9 +46,18 @@ export default class Communities extends Component {
                 self.setState({ matric: user.displayName })
                 firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/').child(user.displayName).on('value', function (snapshot) {
                     var grps = snapshot.val().cca
-                    typeof grps === 'undefined'
-                        ? self.setState({ groups: [] })
-                        : self.setState({ groups: snapshot.val().cca })
+                    if (typeof grps === 'undefined') {
+                        self.setState({ groups: [] })
+                    } else {
+                        self.setState({ groupsById: snapshot.val().cca })
+                        var ccaid = snapshot.val().cca;
+                        for (var i = 0; i < ccaid.length; i++) {
+                            firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/cca/' + ccaid[i]).on('value', function (snapshot) {
+                                ccaid[i] = snapshot.val().name;
+                            }) 
+                        }
+                        self.setState({ groups: ccaid })
+                    }
                     while (self.state.matric == null || self.state.groups == null) {
                         setTimeout(function () { }, 3000);
                     }
@@ -87,7 +97,7 @@ export default class Communities extends Component {
         var statusmap = this.status
         var profilepicmap = this.profilepic
         var me = this.mymatric
-        firebase.database().ref('CCA/' + ccaname + '/' + key).on('value', function (snapshot) {
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/cca/' + ccaname +'/members/' + key).on('value', function (snapshot) {
             var matric = snapshot.val().matric;
             firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric).on('value', function (snapshot) {
                 // curremail = snapshot.val().email;
@@ -113,15 +123,16 @@ export default class Communities extends Component {
     _renderContent = section => {
         const ccaIndex = this.state.activeSections[0]
         console.log(ccaIndex)
-        const ccaname = this.state.groups[ccaIndex]
-        console.log(ccaname) // Sports Management Board
+        const ccaname = this.state.groupsById[ccaIndex]
+        console.log(ccaname) // ccasmb
         if (typeof ccaname !== 'undefined') {
-            firebase.database().ref('CCA/' + ccaname).on('value', querySnapShot => {
+            firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/cca/' + ccaname +'/members').on('value', querySnapShot => {
                 let data = querySnapShot.val() ? querySnapShot.val() : {};
                 console.log(data)
                 let keys = Object.keys(data)
                 console.log(keys)
                 var key
+                this.test = []; // need to reset to empty else will contain members from previous cca
                 for (key of keys) {
                     this.addmemberstoarray(ccaname, key)
                 }

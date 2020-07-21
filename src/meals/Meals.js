@@ -20,6 +20,7 @@ export default class Meals extends Component {
         matric: null,
         mealcredit: null,
         mealresettime: null,
+        resetdonationtime: null,
     }
 
     viewMenu = () => {
@@ -227,6 +228,7 @@ export default class Meals extends Component {
         let self = this;
         unsubscribe = firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
+                // reset meal credit
                 self.setState({ matric: user.displayName })
                 firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/').child(user.displayName).on('value', function (snapshot) {
                     self.setState({ mealcredit: snapshot.val().mealcredit })
@@ -296,6 +298,70 @@ export default class Meals extends Component {
                             }
                         }
                     }
+                } else {
+                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealcredit').set(0)
+                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealresettime').set(timestamp);
+                }
+
+                // reset donated meals counter and array: should be done when first person log in
+                firebase.database().ref('resetdonationtime').on('value', function (snapshot) {
+                    if (snapshot.exists()) {
+                        self.setState({ resetdonationtime: snapshot.val() })
+                    } else {
+                        self.setState({ resetdonationtime: 0 }) // when app just launch
+                    }
+                    while (self.state.resetdonationtime == null) {
+                        setTimeout(function () { }, 3000);
+                        console.log("getting donationtime");
+                    }
+                })
+
+                if (Number(hours) >= 7 && Number(hours) <= 11) {
+                    if (self.state.resetdonationtime === 0) { // array haven't been reset
+                        firebase.database().ref('resetdonationtime').set(timestamp);
+                        firebase.database().ref('mealsdonatedfrom').set(0);
+                        firebase.database().ref('donatedmeals').set(0);
+                    } else {
+                        var lastdonationresetdate = self.state.resetdonationtime.substring(0, 8);
+                        var lastdonationresethour = self.state.resetdonationtime.substring(9, 11);
+                        if (currdate > lastdonationresetdate) { // need to reset
+                            firebase.database().ref('resetdonationtime').set(timestamp);
+                            firebase.database().ref('mealsdonatedfrom').set(0);
+                            firebase.database().ref('donatedmeals').set(0);
+                        } else {
+                            if (Number(lastdonationresethour) >= 7 && Number(lastdonationresethour) <= 11) {
+                            } else {
+                                firebase.database().ref('resetdonationtime').set(timestamp);
+                                firebase.database().ref('mealsdonatedfrom').set(0);
+                                firebase.database().ref('donatedmeals').set(0);
+                            }
+                        }
+                    }
+                } else if (Number(hours) >= 17 && Number(hours) <= 22) { // dinner time
+                    if (self.state.resetdonationtime === 0) { // array haven't been reset
+                        firebase.database().ref('resetdonationtime').set(timestamp);
+                        firebase.database().ref('mealsdonatedfrom').set(0);
+                        firebase.database().ref('donatedmeals').set(0);
+                    } else {
+                        var lastdonationresetdate = self.state.resetdonationtime.substring(0, 8);
+                        var lastdonationresethour = self.state.resetdonationtime.substring(9, 11);
+                        if (currdate > lastdonationresetdate) { // need to reset
+                            firebase.database().ref('resetdonationtime').set(timestamp);
+                            firebase.database().ref('mealsdonatedfrom').set(0);
+                            firebase.database().ref('donatedmeals').set(0);
+                        } else {
+                            if (Number(lastdonationresethour) >= 17 && Number(lastdonationresethour) <= 22) {
+                            } else {
+                                firebase.database().ref('resetdonationtime').set(timestamp);
+                                firebase.database().ref('mealsdonatedfrom').set(0);
+                                firebase.database().ref('donatedmeals').set(0);
+                            }
+                        }
+                    }
+                } else {
+                    firebase.database().ref('resetdonationtime').set(timestamp);
+                    firebase.database().ref('mealsdonatedfrom').set(0);
+                    firebase.database().ref('donatedmeals').set(0);
                 }
             }
         })
@@ -327,17 +393,25 @@ export default class Meals extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <TouchableOpacity onPress={this.donateMeal}>
-                    <Image source={require('../images/donatemeal.png')}
-                        style={styles.circlebtns} />
-                    <Button title="Donate Your Meal" onPress={this.donateMeal} color='#616161' />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.secondMeal}>
-                    <Image source={require('../images/secondserving.png')}
-                        style={styles.circlebtns} />
-                    <Button title="Second Serving Plz..." onPress={this.secondMeal} color='#616161' />
-                </TouchableOpacity>
-            </View>
+                <View style={{ flexDirection: 'row', paddingTop: 5, flex: 9 }} >
+                    <View style={{ justifyContent: 'flex-end' }}>
+                        <TouchableOpacity onPress={this.donateMeal}>
+                            <Image source={require('../images/donatemeal.png')}
+                                style={styles.circlebtns} />
+                            <Button title="Donate Your Meal" onPress={this.donateMeal} color='#616161' />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{ flexDirection: 'row', paddingTop: 5, flex: 9 }} >
+                    <View style={{ justifyContent: 'flex-end' }}>
+                        <TouchableOpacity onPress={this.secondMeal}>
+                            <Image source={require('../images/secondserving.png')}
+                                style={styles.circlebtns} />
+                            <Button title="Second Serving Plz..." onPress={this.secondMeal} color='#616161' />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </View >
         );
     }
 }
@@ -367,8 +441,8 @@ const styles = StyleSheet.create({
         color: '#616161'
     },
     circlebtns: {
-        width: 150,
-        height: 150,
+        width: 140,
+        height: 140,
         alignSelf: 'center'
     }
 });
