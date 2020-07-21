@@ -49,7 +49,7 @@ export default class Announcements extends Component {
             // curremail = snapshot.val().email;
             curraccess = snapshot.val().cca ? snapshot.val().cca : [];
         })
-        return curraccess.includes('JCRC')
+        return curraccess.includes('ccajcrc')
     }
 
     send = (messages) => {

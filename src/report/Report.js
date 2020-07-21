@@ -23,7 +23,7 @@ export default class Report extends Component {
         firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).on('value', function(snapshot) {
             curraccess = snapshot.val().cca ? snapshot.val().cca : [];
         })
-        return curraccess.includes('JCRC')
+        return curraccess.includes('ccajcrc')
     }
 
     render() {
