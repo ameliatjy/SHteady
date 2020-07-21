@@ -79,8 +79,13 @@ export default class Profile extends Component {
 
     handleOnPress = async () => {
         let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+        let newPermission = await ImagePicker.getCameraRollPermissionsAsync();
 
-        if (permissionResult === false) {
+        // console.log("permission", permissionResult)
+        // console.log("permission2", permissionResult.granted)
+        // console.log(newPermission.granted)
+
+        if (permissionResult.granted === false) {
             alert("Permission to access camera roll is required!");
             return;
         } else {
