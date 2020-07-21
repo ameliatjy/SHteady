@@ -59,6 +59,7 @@ export default class Profile extends Component {
     uploadToFirebase = (blob) => {
         return new Promise((resolve, reject) => {
             var storageRef = firebase.storage().ref();
+            var self = this;
 
             storageRef.child('uploads/' + this.state.matric + '.jpg').put(blob, {
                 contentType: 'image/jpeg'
@@ -67,7 +68,10 @@ export default class Profile extends Component {
                 resolve(snapshot);
             }).catch((error) => {
                 reject(error);
-            });
+            }).then(async function () {
+                var link = await firebase.storage().ref().child('uploads/' + self.state.matric + '.jpg').getDownloadURL();
+                firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('profilePicUrl').set(link)
+            })
         }).catch(error => {
             // do nothing when user does not select an image to upload.
         });
@@ -86,7 +90,6 @@ export default class Profile extends Component {
                 if (!result.cancelled) {
                     const { height, width, type, uri } = result;
                     this.setState({ avatarUrl: uri })
-                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + this.state.matric).child('profilePicUrl').set(uri);
                     return this.uriToBlob(uri)
                 }
             }).then((blob) => {
@@ -253,7 +256,7 @@ export default class Profile extends Component {
                             <Arrow name="right" size={40} style={styles.arrow} />
                         </View>
                     </TouchableOpacity>
-                    
+
                     <TouchableOpacity onPress={this.viewCommunities}>
                         <View style={styles.orangeline}></View>
                         <View style={{ flexDirection: 'row', paddingTop: 8, marginLeft: 50, marginRight: 50 }}>
@@ -261,7 +264,7 @@ export default class Profile extends Component {
                             <Arrow name="right" size={40} style={styles.arrow} />
                         </View>
                     </TouchableOpacity>
-                    
+
                     <TouchableOpacity onPress={this.viewContacts}>
                         <View style={styles.orangeline}></View>
                         <View style={{ flexDirection: 'row', paddingTop: 8, marginLeft: 50, marginRight: 50 }}>
