@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, Keyboard, TouchableWithoutFeedback, KeyboardAvoidingView, Dimensions } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -32,13 +33,6 @@ const submitReport = (placeText, problemText, addText) => {
         ]
     );
 }
-
-// need?
-// const copyFbRecord = (original, copy) => {
-//     original.once('value').then(snap => {
-//         copy.set(snap.val())
-//     })
-// }
 
 const confirmedReport = (placeText, problemText, addText) => {
     var user = firebase.auth().currentUser;
@@ -102,7 +96,7 @@ export default class SubmitReport extends Component {
 
     render() {
         return(
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.container}>
                     <Text style={styles.question}>There is something wrong at ... <Text style={{color: '#ab000d'}}>*</Text></Text>
                     <View style={styles.inputConShort}>
@@ -144,7 +138,6 @@ export default class SubmitReport extends Component {
                     </TouchableOpacity>
                 </View>
             </TouchableWithoutFeedback> 
-            
         )
     }
 }
@@ -167,7 +160,7 @@ const styles = StyleSheet.create({
     },
     inputConLong : {
         height: 110,
-        width: 380,
+        width: Dimensions.get('window').width - 35,
         borderColor:'rgba(0,0,0,0.3)',
         borderWidth: 1,
         borderRadius: 5,
@@ -179,7 +172,7 @@ const styles = StyleSheet.create({
     },
     inputLong : {
         height: 100,
-        width: 380,
+        width: Dimensions.get('window').width - 35,
         borderRadius: 5,
         paddingHorizontal: 16,
         alignSelf: 'center',
@@ -188,7 +181,7 @@ const styles = StyleSheet.create({
     },
     inputConShort : {
         height: 50,
-        width: 380,
+        width: Dimensions.get('window').width - 35,
         borderColor:'rgba(0,0,0,0.3)',
         borderWidth: 1,
         borderRadius: 5,
@@ -202,7 +195,7 @@ const styles = StyleSheet.create({
         alignItems: 'center', //added according to jest
         flex: 1, //added according to jest
         height: 40,
-        width: 380,
+        width: Dimensions.get('window').width - 35,
         borderRadius: 5,
         paddingHorizontal: 16,
         alignSelf: 'center',
