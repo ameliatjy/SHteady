@@ -23,25 +23,18 @@ export default class Report extends Component {
         firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).on('value', function(snapshot) {
             curraccess = snapshot.val().cca ? snapshot.val().cca : [];
         })
-        return curraccess.includes('JCRC')
+        return curraccess.includes('ccajcrc')
     }
 
     render() {
         return (
             <Tab.Navigator
                 tabBarOptions={{
-
                     labelStyle: { fontSize: 15, lineHeight:0, width: 100, textTransform:'capitalize', fontWeight:'500'},
-                    // tabStyle: { width: 140,},
-                        //  borderRadius:100, backgroundColor: 'grey',  },
-                    // contentContainerStyle: {width: 50},
-                    style: {height: 50, justifyContent:'center', alignContent:'center'},
-                    // activeTintColor: 'orange'
-                    indicatorStyle: {backgroundColor: '#ffae50'},
-                    activeTintColor: '#ffae50',
-                    inactiveTintColor: 'grey'
-                    
-        
+                    style: {height: 50, justifyContent:'center', alignContent:'center', backgroundColor:'#fff'},
+                    indicatorStyle: {backgroundColor: '#ff7d1d'},
+                    activeTintColor: '#ff7d1d',
+                    inactiveTintColor: '#9e9e9e'
             }}
             >
                 <Tab.Screen name='New Report' component={SubmitReport}/>

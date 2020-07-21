@@ -15,18 +15,11 @@ export default class Dashboard extends Component {
         return (
             <Tab.Navigator
                 tabBarOptions={{
-
                     labelStyle: { fontSize: 15, lineHeight:0, width: 100, textTransform:'capitalize', fontWeight:'500'},
-                    // tabStyle: { width: 140,},
-                        //  borderRadius:100, backgroundColor: 'grey',  },
-                    // contentContainerStyle: {width: 50},
-                    style: {height: 50, justifyContent:'center', alignContent:'center'},
-                    // activeTintColor: 'orange'
-                    indicatorStyle: {backgroundColor: '#ffae50'},
-                    activeTintColor: '#ffae50',
-                    inactiveTintColor: 'grey'
-                    
-        
+                    style: {height: 50, justifyContent:'center', alignContent:'center', backgroundColor:'#fff'},
+                    indicatorStyle: {backgroundColor: '#ff7d1d'},
+                    activeTintColor: '#ff7d1d',
+                    inactiveTintColor: '#9e9e9e'
             }}
             >
                 <Tab.Screen name='New Request' component={SubmitRequest}/>
