@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 
 import Logo from '../components/Logo';
 
@@ -56,7 +56,7 @@ const Login = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Logo />
-            <View style={styles.formCon}>
+            <KeyboardAvoidingView style={styles.formCon} behavior="padding">
                 <View style={styles.inputBox}>
                     <TextInput style={styles.inputBoxText}
                         placeholder='Matric Number'
@@ -73,7 +73,13 @@ const Login = ({ navigation }) => {
                 <TouchableOpacity style={styles.button} onPress={onLoginPressed}>
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
-            </View>
+                <View style={styles.signupTextCont}>
+                    <Text style={styles.signupText}>First time on SHteadty?</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+                        <Text style={styles.signupButton}> Initialize account</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
             <ErrorMsg message={error} onDismiss={() => setError("")} />
         </View>
     )
