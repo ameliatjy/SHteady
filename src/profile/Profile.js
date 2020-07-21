@@ -6,6 +6,7 @@ import {
     Image,
     Text,
     Alert,
+    ScrollView,
     TextInput,
 } from 'react-native';
 
@@ -220,7 +221,7 @@ export default class Profile extends Component {
         };
 
         return (
-            <View style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20 }} >
+            <ScrollView style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20 }} >
                 <View>
                     <TouchableOpacity onPress={this.handleOnPress}>
                         <Image style={styles.profilepic} source={{ uri: this.state.avatarUrl }} />
@@ -295,7 +296,7 @@ export default class Profile extends Component {
                 >
                     <Text style={{ fontSize: 15 }}>Please edit profile</Text>
                 </Snackbar> */}
-            </View >
+            </ScrollView >
 
         )
     }
