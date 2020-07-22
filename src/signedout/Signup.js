@@ -20,24 +20,48 @@ const Signup = ({ navigation }) => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
 
-    const onSignUpPressed = async () => {
-        if (loading) return;
-
-        setLoading(true);
-
-        const response = await signUpUser({
-            matric: matric.value,
-            email: matric.value + '@u.nus.edu',
-            password: password.value,
-            confirmPassword: confirmPassword.value
-        });
-
+    const setVars = (response) => {
         if (response.error) {
             setError(response.error);
         } else {
             setSuccess(true);
             setTimeout(() => navigation.navigate('SignedOut', {screen: 'Login'}), 1500)
         }
+    }
+
+    const onSignUpPressed = async () => {
+        if (loading) return;
+
+        setLoading(true);
+
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric.value).once('value', async function (snapshot) {
+            if (snapshot.exists()) {
+                const response = await signUpUser({
+                    matric: matric.value,
+                    email: matric.value + '@u.nus.edu',
+                    password: password.value,
+                    confirmPassword: confirmPassword.value
+                });
+                setVars(response);
+            } else {
+                setError("Matriculation number provided does not match any registered Shearite.")
+            }
+        })
+
+        // const response = await signUpUser({
+        //     isShearite: isShearite.value,
+        //     matric: matric.value,
+        //     email: matric.value + '@u.nus.edu',
+        //     password: password.value,
+        //     confirmPassword: confirmPassword.value
+        // });
+
+        // if (response.error) {
+        //     setError(response.error);
+        // } else {
+        //     setSuccess(true);
+        //     setTimeout(() => navigation.navigate('SignedOut', {screen: 'Login'}), 1500)
+        // }
 
         setLoading(false);
     };

@@ -22,57 +22,39 @@ export const signUpUser = async ({ matric, email, password, confirmPassword }) =
     } else if (confirmPassword != password) {
         return { error: "Passwords mismatch." }
     } else {
-        var isShearite = null;
-        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric).on('value', function (snapshot) {
-            isShearite = snapshot.exists();
-            console.log(snapshot.exists())
-            while (isShearite == null) {
-                setTimeout(function () { }, 3000);
-                console.log("loading signup page1")
-            }
-        })
-        while (isShearite == null) {
-            setTimeout(function () { }, 3000);
-            console.log("loading signup page2")
-        }
-        if (isShearite == 'false') {
-            console.log("isshearite:", isShearite)
-            return { error: "Matriculation number provided does not match any registered Shearite." }
-        } else {
-            console.log("isshearite:", isShearite)
-            return firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then(function (user) {
-                    console.log('signup page matric:', matric)
-                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/iscreated').set(true);
-                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/status').set("yo hmu i am in");
-                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/profilePicUrl').set('default');
-                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/mealcredit').set(0);
-                    user.user.updateProfile({
-                        displayName: matric
-                    })
-                    return user.user
-                }, function (error) {
-                    console.log(error);
-                    switch (error.code) {
-                        case "auth/email-already-in-use":
-                            return {
-                                error: "Account has been verified before. Please sign in instead."
-                            };
-                        case "auth/invalid-email":
-                            return {
-                                error: "Invalid e-mail address format."
-                            };
-                        case "auth/too-many-requests":
-                            return {
-                                error: "Too many request. Try again in a minute."
-                            };
-                        default:
-                            return {
-                                error: "Check your internet connection."
-                            };
-                    }
+        return firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(function (user) {
+                console.log('signup page matric:', matric)
+                firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/iscreated').set(true);
+                firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/status').set("yo hmu i am in");
+                firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/profilePicUrl').set('default');
+                firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/mealcredit').set(0);
+                user.user.updateProfile({
+                    displayName: matric
                 })
-        }
+                return user.user
+            }, function (error) {
+                console.log(error);
+                switch (error.code) {
+                    case "auth/email-already-in-use":
+                        return {
+                            error: "Account has been verified before. Please sign in instead."
+                        };
+                    case "auth/invalid-email":
+                        return {
+                            error: "Invalid e-mail address format."
+                        };
+                    case "auth/too-many-requests":
+                        return {
+                            error: "Too many request. Try again in a minute."
+                        };
+                    default:
+                        return {
+                            error: "Check your internet connection."
+                        };
+                }
+            })
+
     }
 }
 

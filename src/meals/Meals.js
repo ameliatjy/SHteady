@@ -238,6 +238,20 @@ export default class Meals extends Component {
                         console.log("getting data, setting timeout");
                     }
                 })
+
+                // reset donated meals counter and array: should be done when first person log in
+                firebase.database().ref('resetdonationtime').on('value', function (snapshot) {
+                    if (snapshot.exists()) {
+                        self.setState({ resetdonationtime: snapshot.val() })
+                    } else {
+                        self.setState({ resetdonationtime: 0 }) // when app just launch
+                    }
+                    while (self.state.resetdonationtime == null) {
+                        setTimeout(function () { }, 3000);
+                        console.log("getting donationtime");
+                    }
+                })
+                
                 var date = new Date().getDate().toString();
                 if (date.length == 1) {
                     date = "0" + date;
@@ -302,19 +316,6 @@ export default class Meals extends Component {
                     firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealcredit').set(0)
                     firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealresettime').set(timestamp);
                 }
-
-                // reset donated meals counter and array: should be done when first person log in
-                firebase.database().ref('resetdonationtime').on('value', function (snapshot) {
-                    if (snapshot.exists()) {
-                        self.setState({ resetdonationtime: snapshot.val() })
-                    } else {
-                        self.setState({ resetdonationtime: 0 }) // when app just launch
-                    }
-                    while (self.state.resetdonationtime == null) {
-                        setTimeout(function () { }, 3000);
-                        console.log("getting donationtime");
-                    }
-                })
 
                 if (Number(hours) >= 7 && Number(hours) <= 11) {
                     if (self.state.resetdonationtime === 0) { // array haven't been reset

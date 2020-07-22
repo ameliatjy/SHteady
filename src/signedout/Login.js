@@ -15,8 +15,6 @@ const Login = ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    console.log('at homepage', firebase.auth().currentUser)
-
     const onLoginPressed = async () => {
         if (loading) return;
 
@@ -27,9 +25,6 @@ const Login = ({ navigation }) => {
             email: matric.value + '@u.nus.edu',
             password: password.value
         });
-
-        console.log('navigating????')
-        console.log('response', response);
 
         //for wenyu's version:
         // if (typeof response === 'undefined') {
@@ -45,7 +40,6 @@ const Login = ({ navigation }) => {
         if (response.error) {
             setError(response.error);
         } else {
-            console.log('navigating')
             Promise.all([navigation.navigate('SignedIn', { screen: 'Profile' })])
                 .then(() => navigation.navigate('Profile'));
         }
