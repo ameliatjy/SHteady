@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontSize: 17,
         color: '#000000',
+        textAlignVertical: 'top'
     },
     inputConShort : {
         height: 50,
@@ -238,9 +239,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontSize: 17,
         color: '#000000',
+        textAlignVertical: 'top'
     },
     button : {
-        width: 380,
+        width: Dimensions.get('window').width - 35,
         height: 40,
         backgroundColor: '#ff7d1d',
         borderRadius: 5,
