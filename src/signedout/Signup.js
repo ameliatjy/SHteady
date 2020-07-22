@@ -13,7 +13,6 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 const Signup = ({ navigation }) => {
-    const [name, setName] = useState({ value: "", error: "" });
     const [matric, setMatric] = useState({ value: "", error: "" });
     const [password, setPassword] = useState({ value: "", error: "" });
     const [confirmPassword, setConfirmPassword] = useState({ value: "", error: " " })
@@ -27,7 +26,6 @@ const Signup = ({ navigation }) => {
         setLoading(true);
 
         const response = await signUpUser({
-            name: name.value,
             matric: matric.value,
             email: matric.value + '@u.nus.edu',
             password: password.value,
@@ -50,18 +48,8 @@ const Signup = ({ navigation }) => {
             <KeyboardAvoidingView style={styles.formCon} behavior="padding">
                 <View style={styles.inputBox}>
                     <TextInput style={styles.inputBoxText}
-                        placeholder='Full Name'
-                        onChangeText={text => setName({ value: text, error: '' })}
-                        placeholderTextColor='rgba(0,0,0,0.6)'
-                        autoCapitalize="words"
-                        error={!!name.error}
-                        errorText={name.error}
-                        value={name.value} />
-                </View>
-                <View style={styles.inputBox}>
-                    <TextInput style={styles.inputBoxText}
                         placeholder='Matriculation Number'
-                        onChangeText={text => setMatric({ value: text, error: '' })}
+                        onChangeText={text => setMatric({ value: text.toUpperCase(), error: '' })}
                         placeholderTextColor='rgba(0,0,0,0.6)'
                         autoCapitalize="words"
                         error={!!matric.error}
@@ -94,7 +82,7 @@ const Signup = ({ navigation }) => {
                 </TouchableOpacity>
             </KeyboardAvoidingView>
             <View style={styles.signupTextCont}>
-                <Text style={styles.signupText}>Already have an account?</Text>
+                <Text style={styles.signupText}>Already initialized account?</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('SignedOut', {screen: 'Login'})}>
                     <Text style={styles.signupButton}> Sign in</Text>
                 </TouchableOpacity>
@@ -108,7 +96,7 @@ const Signup = ({ navigation }) => {
                     duration={1500}
                     onDismiss={() => setSuccess(false)}
                     style={{ backgroundColor: '#00B386' }}>
-                    <Text>Account created! Do login to continue.</Text>
+                    <Text>Account initialized! Do login to continue.</Text>
                 </Snackbar>
             </View>
         </View>
