@@ -15,8 +15,8 @@ export default class Dashboard extends Component {
         return (
             <Tab.Navigator
                 tabBarOptions={{
-                    labelStyle: { fontSize: 15, lineHeight:0, width: 100, textTransform:'capitalize', fontWeight:'500'},
-                    style: {height: 50, justifyContent:'center', alignContent:'center', backgroundColor:'#fff'},
+                    labelStyle: { fontSize: 15, lineHeight:0, width: 100, textTransform:'capitalize', fontWeight:'500' },
+                    style: { height: 50, justifyContent:'center', alignContent:'center', backgroundColor:'transparent' },
                     indicatorStyle: {backgroundColor: '#ff7d1d'},
                     activeTintColor: '#ff7d1d',
                     inactiveTintColor: '#9e9e9e'

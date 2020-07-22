@@ -38,27 +38,64 @@ const confirmedReport = (placeText, problemText, addText) => {
     var user = firebase.auth().currentUser;
     var matric = user.displayName
 
-    var newReport = firebase.database().ref('report/').push()
-    newReport.set({
-        timeSubmitted: firebase.database.ServerValue.TIMESTAMP,
-        location: placeText,
-        problem: problemText,
-        otherDetails: addText,
-        status: 'RECEIVED',
-        reportSubmittedBy: matric,
-        lastUpdatedTime: firebase.database.ServerValue.TIMESTAMP
-    })
+    var name, currReports
 
-    var newKey = newReport.getKey()
-    var currReports = []
-
-    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).on('value', function(snapshot) {
-            // curremail = snapshot.val().email;
+    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).once('value', function(snapshot) {
+        name = snapshot.val().name
         currReports = snapshot.val().submittedReports ? snapshot.val().submittedReports : [];
+    }).then(() => {
+        var newReport = firebase.database().ref('report/').push()
+        newReport.set({
+            name: name,
+            timeSubmitted: firebase.database.ServerValue.TIMESTAMP,
+            location: placeText,
+            problem: problemText,
+            otherDetails: addText,
+            status: 'RECEIVED',
+            reportSubmittedBy: matric,
+            lastUpdatedTime: firebase.database.ServerValue.TIMESTAMP
+        })
+        var newKey = newReport.getKey()
+        currReports.push(newKey)
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).child('submittedReports').set(currReports)
     })
-    currReports.push(newKey)
 
-    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).child('submittedReports').set(currReports)
+    
+    
+
+    // var user = firebase.auth().currentUser;
+    // var matric = user.displayName
+
+    // var name
+    // var currReports = []
+
+    // firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).once('value', function(snapshot) {
+    //     name = snapshot.val().name
+    //     currReports = snapshot.val().submittedReports ? snapshot.val().submittedReports : [];
+    // })
+
+    // var newReport = firebase.database().ref('report/').push()
+    // newReport.set({
+    //     name: name,
+    //     timeSubmitted: firebase.database.ServerValue.TIMESTAMP,
+    //     location: placeText,
+    //     problem: problemText,
+    //     otherDetails: addText,
+    //     status: 'RECEIVED',
+    //     reportSubmittedBy: matric,
+    //     lastUpdatedTime: firebase.database.ServerValue.TIMESTAMP
+    // })
+
+    // var newKey = newReport.getKey()
+    // var currReports = []
+
+    // firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).on('value', function(snapshot) {
+    //         // curremail = snapshot.val().email;
+    //     currReports = snapshot.val().submittedReports ? snapshot.val().submittedReports : [];
+    // })
+    // currReports.push(newKey)
+
+    // firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/'+ matric).child('submittedReports').set(currReports)
 }
 
 export default class SubmitReport extends Component {
@@ -178,6 +215,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontSize: 17,
         color: '#000000',
+        textAlignVertical: 'top'
     },
     inputConShort : {
         height: 50,
@@ -201,9 +239,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontSize: 17,
         color: '#000000',
+        textAlignVertical: 'top'
     },
     button : {
-        width: 380,
+        width: Dimensions.get('window').width - 35,
         height: 40,
         backgroundColor: '#ff7d1d',
         borderRadius: 5,
