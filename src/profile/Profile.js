@@ -294,7 +294,7 @@ export default class Profile extends Component {
                 >
                     <Text style={{ fontSize: 15 }}>Please edit profile</Text>
                 </Snackbar> */}
-            </ScrollView >
+            </ScrollView>
 
         )
     }
