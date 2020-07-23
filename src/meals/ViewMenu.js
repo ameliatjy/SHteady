@@ -16,7 +16,7 @@ const Item = ({ title }) => (
     </View>
 );
 
-class viewMenu extends Component {
+class ViewMenu extends Component {
     state = {
         menu: null
     }
@@ -47,7 +47,7 @@ class viewMenu extends Component {
     }
 }
 
-export default viewMenu;
+export default ViewMenu;
 
 const styles = StyleSheet.create({
     container: {

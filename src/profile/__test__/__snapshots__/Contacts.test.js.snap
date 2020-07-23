@@ -1,0 +1,541 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders snapshot as expected 1`] = `
+<View
+  style={
+    Object {
+      "margin": 12,
+    }
+  }
+>
+  <RCTScrollView>
+    <View>
+      <Text
+        style={
+          Object {
+            "alignSelf": "center",
+            "fontSize": 28,
+            "fontWeight": "bold",
+            "padding": 10,
+          }
+        }
+      >
+        Sheares Hall
+      </Text>
+      <Text
+        style={
+          Object {
+            "alignSelf": "center",
+            "marginBottom": 15,
+          }
+        }
+      >
+        20 Heng Mui Keng Terrace, Singapore 119618
+      </Text>
+      <View
+        style={
+          Object {
+            "backgroundColor": "#ffd4b3",
+            "borderRadius": 10,
+            "marginTop": 10,
+            "padding": 20,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "paddingBottom": 5,
+            }
+          }
+        >
+          Hall Office Hours
+        </Text>
+        <Text
+          style={
+            Object {
+              "paddingBottom": 5,
+            }
+          }
+        >
+          Monday - Thursday: 9AM - 6PM
+        </Text>
+        <Text
+          style={
+            Object {
+              "paddingBottom": 5,
+            }
+          }
+        >
+          Friday: 9AM - 5.30PM
+        </Text>
+        <Text>
+          Saturday - Sunday: Closed
+        </Text>
+      </View>
+      <View
+        style={
+          Object {
+            "backgroundColor": "#ffd4b3",
+            "borderRadius": 10,
+            "marginTop": 10,
+            "padding": 20,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "paddingBottom": 5,
+            }
+          }
+        >
+          For finance (student activities) matters:
+        </Text>
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+              "flexWrap": "wrap",
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "paddingBottom": 5,
+              }
+            }
+          >
+            Please contact Jamie at 
+          </Text>
+          <View
+            accessible={true}
+            focusable={true}
+            isTVSelectable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "rgb(25, 125, 280)",
+                }
+              }
+            >
+              6601 7191 
+            </Text>
+          </View>
+          <Text>
+            or email her at 
+          </Text>
+          <View
+            accessible={true}
+            focusable={true}
+            isTVSelectable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "rgb(25, 125, 280)",
+                }
+              }
+            >
+              jamie@nus.edu.sg
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "backgroundColor": "#ffd4b3",
+            "borderRadius": 10,
+            "marginTop": 10,
+            "padding": 20,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "paddingBottom": 5,
+            }
+          }
+        >
+          For student related matters:
+        </Text>
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+              "flexWrap": "wrap",
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "paddingBottom": 5,
+              }
+            }
+          >
+            Please contact Valli at 
+          </Text>
+          <View
+            accessible={true}
+            focusable={true}
+            isTVSelectable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "rgb(25, 125, 280)",
+                }
+              }
+            >
+              6516 1022 
+            </Text>
+          </View>
+          <Text>
+            or email her at 
+          </Text>
+          <View
+            accessible={true}
+            focusable={true}
+            isTVSelectable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "rgb(25, 125, 280)",
+                }
+              }
+            >
+              sshbv@nus.edu.sg
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "backgroundColor": "#ffd4b3",
+            "borderRadius": 10,
+            "marginTop": 10,
+            "padding": 20,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "paddingBottom": 5,
+            }
+          }
+        >
+          For accomodation, maintenance or finance (hostel fee) matters:
+        </Text>
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+              "flexWrap": "wrap",
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "paddingBottom": 5,
+              }
+            }
+          >
+            Please contact Jamuna (
+          </Text>
+          <View
+            accessible={true}
+            focusable={true}
+            isTVSelectable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "rgb(25, 125, 280)",
+                }
+              }
+            >
+              ohsjk@nus.edu.sg
+            </Text>
+          </View>
+          <Text>
+            ) or 
+          </Text>
+          <Text>
+            Wen Hui (
+          </Text>
+          <View
+            accessible={true}
+            focusable={true}
+            isTVSelectable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "rgb(25, 125, 280)",
+                }
+              }
+            >
+              oshkwh@nus.edu.sg
+            </Text>
+          </View>
+          <Text>
+            ) at 
+          </Text>
+          <View
+            accessible={true}
+            focusable={true}
+            isTVSelectable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "rgb(25, 125, 280)",
+                }
+              }
+            >
+              6601 7202
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "backgroundColor": "#ffd4b3",
+            "borderRadius": 10,
+            "marginTop": 10,
+            "padding": 20,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "paddingBottom": 5,
+            }
+          }
+        >
+          For other matters:
+        </Text>
+        <View
+          style={
+            Object {
+              "flexDirection": "row",
+              "flexWrap": "wrap",
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "paddingBottom": 5,
+              }
+            }
+          >
+            Please contact Qi Qi at 
+          </Text>
+          <View
+            accessible={true}
+            focusable={true}
+            isTVSelectable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "rgb(25, 125, 280)",
+                }
+              }
+            >
+              6516 1231 
+            </Text>
+          </View>
+          <Text>
+            or email her at 
+          </Text>
+          <View
+            accessible={true}
+            focusable={true}
+            isTVSelectable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "color": "rgb(25, 125, 280)",
+                }
+              }
+            >
+              sshkqq@nus.edu.sg
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "paddingTop": 15,
+          }
+        }
+      >
+        <Text>
+          For other information, do visit:
+        </Text>
+        <View
+          accessible={true}
+          focusable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "rgb(25, 125, 280)",
+              }
+            }
+          >
+            http://nus.edu.sg/osa/sheareshall
+          </Text>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
+</View>
+`;

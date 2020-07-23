@@ -25,23 +25,23 @@ export default class Navbar extends Component {
         taskCount: 0,
     }
 
-    numDashboardTasks() {
-        var count = 0
-        firebase.database().ref('dashboard/').on('value', function(snapshot) {
-            count = snapshot.numChildren()
-        })
-        return count
-    }
+    // numDashboardTasks() {
+    //     var count = 0
+    //     firebase.database().ref('dashboard/').on('value', function(snapshot) {
+    //         count = snapshot.numChildren()
+    //     })
+    //     return count
+    // }
 
-    componentDidMount() {
-        setInterval(() => {
-            this.setState({taskCount: this.numDashboardTasks()})
-        }, 3000)
-    }
+    // componentDidMount() {
+    //     setInterval(() => {
+    //         this.setState({taskCount: this.numDashboardTasks()})
+    //     }, 3000)
+    // }
 
-    componentWillUnmount() {
-        return firebase.database().ref('/dashboard').off()
-    }
+    // componentWillUnmount() {
+    //     return firebase.database().ref('/dashboard').off()
+    // }
 
     render() {
         return (

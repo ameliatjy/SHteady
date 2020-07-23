@@ -4,7 +4,6 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import SubmitReport from './SubmitReport'
 import History from './History'
-import MasterHistory from './MasterHistory'
 import ReceivedHistory from './ReceivedHistory';
 import InProgressHistory from './InProgressHistory'
 

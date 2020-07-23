@@ -4,16 +4,10 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Alert,
-    Image,
     ScrollView,
     Linking,
-    Button
 } from 'react-native';
 
-import Arrow from 'react-native-vector-icons/AntDesign';
-
-import firebase from 'firebase/app';
 import 'firebase/auth';
 
 export default class Contacts extends Component {

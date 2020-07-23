@@ -1,0 +1,214 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders snapshot as expected 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fffde7",
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "flex-end",
+      }
+    }
+  >
+    <Image
+      source={1}
+      style={
+        Object {
+          "height": 200,
+          "width": 750,
+        }
+      }
+    />
+    <Text
+      style={
+        Object {
+          "fontSize": 25,
+          "marginVertical": 15,
+        }
+      }
+    >
+      Hey there, Shearite!
+    </Text>
+  </View>
+  <View
+    onLayout={[Function]}
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "flex": 1,
+          "justifyContent": "flex-start",
+        },
+        Object {
+          "paddingBottom": 0,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Object {
+          "borderColor": "rgba(0,0,0,0.5)",
+          "borderRadius": 5,
+          "borderWidth": 1,
+          "height": 40,
+          "marginVertical": 5,
+          "width": 300,
+        }
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        onChangeText={[Function]}
+        placeholder="Matric Number"
+        placeholderTextColor="rgba(0,0,0,0.6)"
+        rejectResponderTermination={true}
+        style={
+          Object {
+            "color": "#000000",
+            "flex": 1,
+            "fontSize": 20,
+            "paddingHorizontal": 16,
+          }
+        }
+        underlineColorAndroid="transparent"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "borderColor": "rgba(0,0,0,0.5)",
+          "borderRadius": 5,
+          "borderWidth": 1,
+          "height": 40,
+          "marginVertical": 5,
+          "width": 300,
+        }
+      }
+    >
+      <TextInput
+        allowFontScaling={true}
+        onChangeText={[Function]}
+        placeholder="Password"
+        placeholderTextColor="rgba(0,0,0,0.6)"
+        rejectResponderTermination={true}
+        secureTextEntry={true}
+        style={
+          Object {
+            "color": "#000000",
+            "flex": 1,
+            "fontSize": 20,
+            "paddingHorizontal": 16,
+          }
+        }
+        underlineColorAndroid="transparent"
+      />
+    </View>
+    <View
+      accessible={true}
+      focusable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "backgroundColor": "#ff7d1d",
+          "borderRadius": 5,
+          "height": 40,
+          "justifyContent": "center",
+          "marginVertical": 10,
+          "opacity": 1,
+          "width": 300,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#000000",
+            "fontSize": 20,
+            "fontWeight": "500",
+            "textAlign": "center",
+          }
+        }
+      >
+        Login
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "justifyContent": "flex-end",
+          "paddingVertical": 50,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "rgba(0,0,0,0.8)",
+            "fontSize": 18,
+          }
+        }
+      >
+        First time on SHteadty?
+      </Text>
+      <View
+        accessible={true}
+        focusable={true}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "opacity": 1,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#000000",
+              "fontSize": 18,
+              "fontWeight": "500",
+            }
+          }
+        >
+           Initialize account
+        </Text>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "position": "absolute",
+        "top": 100,
+        "width": "100%",
+      }
+    }
+  />
+</View>
+`;
