@@ -290,6 +290,26 @@ export default class Meals extends Component {
                             }
                         }
                     }
+                    if (self.state.resetdonationtime === 0) { // array haven't been reset
+                        firebase.database().ref('resetdonationtime').set(timestamp);
+                        firebase.database().ref('mealsdonatedfrom').set(0);
+                        firebase.database().ref('donatedmeals').set(0);
+                    } else {
+                        var lastdonationresetdate = self.state.resetdonationtime.substring(0, 8);
+                        var lastdonationresethour = self.state.resetdonationtime.substring(9, 11);
+                        if (currdate > lastdonationresetdate) { // need to reset
+                            firebase.database().ref('resetdonationtime').set(timestamp);
+                            firebase.database().ref('mealsdonatedfrom').set(0);
+                            firebase.database().ref('donatedmeals').set(0);
+                        } else {
+                            if (Number(lastdonationresethour) >= 7 && Number(lastdonationresethour) <= 11) {
+                            } else {
+                                firebase.database().ref('resetdonationtime').set(timestamp);
+                                firebase.database().ref('mealsdonatedfrom').set(0);
+                                firebase.database().ref('donatedmeals').set(0);
+                            }
+                        }
+                    }
                 } else if (Number(hours) >= 17 && Number(hours) <= 22) { // dinner time
                     if (self.state.mealresettime === 0) { // new user
                         firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealcredit').set(1)
@@ -312,12 +332,6 @@ export default class Meals extends Component {
                             }
                         }
                     }
-                } else {
-                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealcredit').set(0)
-                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealresettime').set(timestamp);
-                }
-
-                if (Number(hours) >= 7 && Number(hours) <= 11) {
                     if (self.state.resetdonationtime === 0) { // array haven't been reset
                         firebase.database().ref('resetdonationtime').set(timestamp);
                         firebase.database().ref('mealsdonatedfrom').set(0);
@@ -325,27 +339,7 @@ export default class Meals extends Component {
                     } else {
                         var lastdonationresetdate = self.state.resetdonationtime.substring(0, 8);
                         var lastdonationresethour = self.state.resetdonationtime.substring(9, 11);
-                        if (currdate > lastdonationresetdate) { // need to reset
-                            firebase.database().ref('resetdonationtime').set(timestamp);
-                            firebase.database().ref('mealsdonatedfrom').set(0);
-                            firebase.database().ref('donatedmeals').set(0);
-                        } else {
-                            if (Number(lastdonationresethour) >= 7 && Number(lastdonationresethour) <= 11) {
-                            } else {
-                                firebase.database().ref('resetdonationtime').set(timestamp);
-                                firebase.database().ref('mealsdonatedfrom').set(0);
-                                firebase.database().ref('donatedmeals').set(0);
-                            }
-                        }
-                    }
-                } else if (Number(hours) >= 17 && Number(hours) <= 22) { // dinner time
-                    if (self.state.resetdonationtime === 0) { // array haven't been reset
-                        firebase.database().ref('resetdonationtime').set(timestamp);
-                        firebase.database().ref('mealsdonatedfrom').set(0);
-                        firebase.database().ref('donatedmeals').set(0);
-                    } else {
-                        var lastdonationresetdate = self.state.resetdonationtime.substring(0, 8);
-                        var lastdonationresethour = self.state.resetdonationtime.substring(9, 11);
+                        console.log(lastdonationresethour);
                         if (currdate > lastdonationresetdate) { // need to reset
                             firebase.database().ref('resetdonationtime').set(timestamp);
                             firebase.database().ref('mealsdonatedfrom').set(0);
@@ -360,6 +354,8 @@ export default class Meals extends Component {
                         }
                     }
                 } else {
+                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealcredit').set(0)
+                    firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('mealresettime').set(timestamp);
                     firebase.database().ref('resetdonationtime').set(timestamp);
                     firebase.database().ref('mealsdonatedfrom').set(0);
                     firebase.database().ref('donatedmeals').set(0);
