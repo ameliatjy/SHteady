@@ -1,0 +1,238 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Renders snapshot as expected 1`] = `
+<View
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignContent": "center",
+      "flex": 1,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "paddingLeft": 20,
+        "paddingTop": 20,
+      }
+    }
+  >
+    There is something wrong at ... 
+    <Text
+      style={
+        Object {
+          "color": "#ab000d",
+        }
+      }
+    >
+      *
+    </Text>
+  </Text>
+  <View
+    style={
+      Object {
+        "alignSelf": "center",
+        "borderColor": "rgba(0,0,0,0.3)",
+        "borderRadius": 5,
+        "borderWidth": 1,
+        "height": 50,
+        "justifyContent": "flex-start",
+        "marginVertical": 5,
+        "paddingHorizontal": 16,
+        "paddingVertical": 5,
+        "width": 715,
+      }
+    }
+  >
+    <TextInput
+      allowFontScaling={true}
+      multiline={true}
+      onChangeText={[Function]}
+      placeholder="Where? Block? Level?"
+      placeholderTextColor="rgba(0,0,0,0.6)"
+      rejectResponderTermination={true}
+      style={
+        Object {
+          "alignItems": "center",
+          "alignSelf": "center",
+          "borderRadius": 5,
+          "color": "#000000",
+          "flex": 1,
+          "fontSize": 17,
+          "height": 40,
+          "paddingHorizontal": 16,
+          "textAlignVertical": "top",
+          "width": 715,
+        }
+      }
+      underlineColorAndroid="transparent"
+    />
+  </View>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "paddingLeft": 20,
+        "paddingTop": 20,
+      }
+    }
+  >
+    There is something wrong with ... 
+    <Text
+      style={
+        Object {
+          "color": "#ab000d",
+        }
+      }
+    >
+      *
+    </Text>
+  </Text>
+  <View
+    style={
+      Object {
+        "alignSelf": "center",
+        "borderColor": "rgba(0,0,0,0.3)",
+        "borderRadius": 5,
+        "borderWidth": 1,
+        "height": 110,
+        "justifyContent": "flex-start",
+        "marginVertical": 5,
+        "paddingHorizontal": 16,
+        "paddingVertical": 5,
+        "width": 715,
+      }
+    }
+  >
+    <TextInput
+      allowFontScaling={true}
+      multiline={true}
+      onChangeText={[Function]}
+      placeholder="What?"
+      placeholderTextColor="rgba(0,0,0,0.6)"
+      rejectResponderTermination={true}
+      style={
+        Object {
+          "alignSelf": "center",
+          "borderRadius": 5,
+          "color": "#000000",
+          "fontSize": 17,
+          "height": 100,
+          "paddingHorizontal": 16,
+          "textAlignVertical": "top",
+          "width": 715,
+        }
+      }
+      underlineColorAndroid="transparent"
+    />
+  </View>
+  <Text
+    style={
+      Object {
+        "fontSize": 18,
+        "paddingLeft": 20,
+        "paddingTop": 20,
+      }
+    }
+  >
+    Any other details to add ...
+  </Text>
+  <View
+    style={
+      Object {
+        "alignSelf": "center",
+        "borderColor": "rgba(0,0,0,0.3)",
+        "borderRadius": 5,
+        "borderWidth": 1,
+        "height": 110,
+        "justifyContent": "flex-start",
+        "marginVertical": 5,
+        "paddingHorizontal": 16,
+        "paddingVertical": 5,
+        "width": 715,
+      }
+    }
+  >
+    <TextInput
+      allowFontScaling={true}
+      multiline={true}
+      onChangeText={[Function]}
+      placeholder="hhddbosnovjdfpmv"
+      placeholderTextColor="rgba(0,0,0,0.6)"
+      rejectResponderTermination={true}
+      style={
+        Object {
+          "alignSelf": "center",
+          "borderRadius": 5,
+          "color": "#000000",
+          "fontSize": 17,
+          "height": 100,
+          "paddingHorizontal": 16,
+          "textAlignVertical": "top",
+          "width": 715,
+        }
+      }
+      underlineColorAndroid="transparent"
+    />
+  </View>
+  <Text
+    style={
+      Object {
+        "color": "#ab000d",
+        "fontSize": 16,
+        "paddingLeft": 20,
+        "paddingTop": 15,
+      }
+    }
+  >
+    Required field *
+  </Text>
+  <View
+    accessible={true}
+    focusable={true}
+    isTVSelectable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignSelf": "center",
+        "backgroundColor": "#ff7d1d",
+        "borderRadius": 5,
+        "height": 40,
+        "justifyContent": "center",
+        "marginVertical": 20,
+        "opacity": 1,
+        "width": 715,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "#ffffff",
+          "fontSize": 18,
+          "fontWeight": "500",
+          "textAlign": "center",
+        }
+      }
+    >
+      Submit
+    </Text>
+  </View>
+</View>
+`;

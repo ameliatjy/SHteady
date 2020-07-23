@@ -25,7 +25,7 @@ exports[`Renders snapshot as expected 1`] = `
         }
       }
     >
-      No new reports have been received.
+      There are no reports currently in progress.
     </Text>
   </View>
 </View>

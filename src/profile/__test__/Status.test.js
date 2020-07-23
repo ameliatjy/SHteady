@@ -1,11 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer'
 
-import Menu from '../ViewMenu';
-
-//import firebase from 'firebase/app';
 import 'firebase/database'
-import 'firebase/auth'
+import Status from '../Status';
 
 const firebase = require('firebase');
 //const admin = require('firebase-admin');
@@ -25,6 +22,6 @@ firebase.initializeApp(firebaseConfig);
 jest.useFakeTimers();
 
 test('Renders snapshot as expected', () => {
-    const tree = renderer.create(<Menu />).toJSON();
+    const tree = renderer.create(<Status/>).toJSON();
     expect(tree).toMatchSnapshot();
 });

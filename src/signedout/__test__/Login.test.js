@@ -1,10 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer'
 
-import Dashboard from '../Dashboard';
-
-//import firebase from 'firebase/app';
 import 'firebase/database'
+import Login from '../Login'
 
 const firebase = require('firebase');
 //const admin = require('firebase-admin');
@@ -24,12 +22,6 @@ firebase.initializeApp(firebaseConfig);
 jest.useFakeTimers();
 
 test('Renders snapshot as expected', () => {
-    const tree = renderer.create(<Dashboard/>).toJSON();
+    const tree = renderer.create(<Login/>).toJSON();
     expect(tree).toMatchSnapshot();
 });
-
-// describe('<Dashboard />', () => {
-//       it('fake test', () => {
-//           expect(true).toBeTruthy();
-//       })
-//     });
