@@ -19,11 +19,7 @@ import Arrow from 'react-native-vector-icons/AntDesign';
 
 import { Snackbar } from "react-native-paper";
 
-import * as ImagePicker from 'expo-image-picker';
-
 import { StatusButton } from '../components/statusbutton';
-
-import Dialog from 'react-native-dialog';
 
 let unsubscribe;
 
@@ -38,74 +34,8 @@ export default class Profile extends Component {
         avatarUrl: 'https://firebasestorage.googleapis.com/v0/b/shteady-b81ed.appspot.com/o/defaultsheares.png?alt=media&token=95e0cee4-a5c0-4000-8e9b-2c258f87fe2d',
     };
 
-    uriToBlob = (uri) => {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-
-            xhr.onload = function () {
-                resolve(xhr.response);
-            };
-
-            xhr.onerror = function () {
-                reject(new Error('uriToBlob failed'));
-            };
-
-            xhr.responseType = 'blob';
-
-            xhr.open('GET', uri, true);
-            xhr.send(null);
-        }).catch(alert);
-    }
-
-    uploadToFirebase = (blob) => {
-        return new Promise((resolve, reject) => {
-            var storageRef = firebase.storage().ref();
-            var self = this;
-
-            storageRef.child('uploads/' + this.state.matric + '.jpg').put(blob, {
-                contentType: 'image/jpeg'
-            }).then((snapshot) => {
-                blob.close();
-                resolve(snapshot);
-            }).catch((error) => {
-                reject(error);
-            }).then(async function () {
-                var link = await firebase.storage().ref().child('uploads/' + self.state.matric + '.jpg').getDownloadURL();
-                firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('profilePicUrl').set(link)
-            })
-        }).catch(error => {
-            // do nothing when user does not select an image to upload.
-        });
-    }
-
-    handleOnPress = async () => {
-        let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
-        let newPermission = await ImagePicker.getCameraRollPermissionsAsync();
-
-        // console.log("permission", permissionResult)
-        // console.log("permission2", permissionResult.granted)
-        // console.log(newPermission.granted)
-
-        if (permissionResult.granted === false) {
-            alert("Permission to access camera roll is required!");
-            return;
-        } else {
-            ImagePicker.launchImageLibraryAsync({
-                mediaTypes: "Images"
-            }).then((result) => {
-                if (!result.cancelled) {
-                    const { height, width, type, uri } = result;
-                    this.setState({ avatarUrl: uri })
-                    return this.uriToBlob(uri)
-                }
-            }).then((blob) => {
-                return this.uploadToFirebase(blob);
-            }).then((snapshot) => {
-                console.log("File uploaded");
-            }).catch((error) => {
-                throw error;
-            });
-        }
+    editProfile = () => {
+        this.props.navigation.navigate('Subpages', { screen: 'EditProfile' });
     }
 
     statusUpdate = () => {
@@ -154,9 +84,6 @@ export default class Profile extends Component {
                     snapshot.val().profilePicUrl === 'default'
                         ? self.setState({ avatarUrl: 'https://firebasestorage.googleapis.com/v0/b/shteady-b81ed.appspot.com/o/defaultsheares.png?alt=media&token=95e0cee4-a5c0-4000-8e9b-2c258f87fe2d' })
                         : self.setState({ avatarUrl: snapshot.val().profilePicUrl })
-                    // snapshot.val().room === 'Enter room number'
-                    //     ? self.setState({ msgVisible: true })
-                    //     : self.setState({ msgVisible: false })
                     while (self.state.matric == null || self.state.currname == null ||
                         self.state.currroom == null || self.state.status == null) {
                         setTimeout(function () { }, 3000);
@@ -179,77 +106,19 @@ export default class Profile extends Component {
 
     render() {
 
-        console.log("avatarurl:", this.state.avatarUrl);
-
-        // const editProfile = () => {
-        //     this.props.navigation.navigate('Subpages', {
-        //         screen: 'EditProfile'
-        //     });
-        // }
-
-        const showDialog = () => {
-            this.setState({ dialog: true });
-        };
-
-        const handleCancel = () => {
-            this.setState({ dialog: false });
-        };
-
-        const handleConfirm = () => {
-            if (this.state.password1 == this.state.password2) {
-                var user = firebase.auth().currentUser;
-                user.updatePassword(this.state.password1).then(function () {
-                    //do nth
-                }).catch(function (error) {
-                    console.log(error);
-                })
-                Alert.alert(
-                    'Successful',
-                    'Password updated!',
-                    [
-                        {
-                            text: 'Ok',
-                            onPress: () => this.setState({ dialog: false }),
-                        }
-                    ]
-                )
-            } else {
-                alert("New passwords mismatch!");
-            }
-        };
-
         return (
             <ScrollView style={{ flexDirection: 'column', paddingTop: 20, paddingBottom: 20 }} >
                 <View>
-                    <TouchableOpacity onPress={this.handleOnPress}>
-                        <Image style={styles.profilepic} source={{ uri: this.state.avatarUrl }} />
-                    </TouchableOpacity>
+                    <Image style={styles.profilepic} source={{ uri: this.state.avatarUrl }} />
                     <Text style={styles.name}>{this.state.currname}</Text>
                     <Text style={styles.details}>{this.state.currroom} | {this.state.matric}</Text>
                     <TouchableOpacity>
                         <Button bordered dark
                             style={styles.changpasswordbtn}
-                            onPress={showDialog}>
-                            <Text style={{ fontSize: 12, color: '#616161' }}>Change Password</Text>
+                            onPress={this.editProfile}>
+                            <Text style={{ fontSize: 12, color: '#616161' }}>Edit Profile</Text>
                         </Button>
                     </TouchableOpacity>
-
-                    <Dialog.Container visible={this.state.dialog}>
-                        <Dialog.Title>Change Password</Dialog.Title>
-                        <Dialog.Description>
-                            Please enter current password and new password.
-                        </Dialog.Description>
-                        <Dialog.Input
-                            placeholder="New Password"
-                            secureTextEntry
-                            onChangeText={(inputText) => this.setState({ password1: inputText })} />
-                        <Dialog.Input
-                            placeholder="Confirm New Password"
-                            secureTextEntry
-                            onChangeText={(inputText) => this.setState({ password2: inputText })} />
-                        <Dialog.Button label="Cancel" onPress={handleCancel} />
-                        <Dialog.Button label="Confirm" onPress={handleConfirm} />
-                    </Dialog.Container>
                 </View>
 
                 <View>

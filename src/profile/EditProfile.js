@@ -6,83 +6,136 @@ import {
     StyleSheet,
     View,
     Text,
+    Button,
+    Alert,
+    TouchableOpacity,
 } from 'react-native';
 
-import MultiSelect from 'react-native-multiple-select';
-import { Button } from 'native-base';
-import { TextInput } from 'react-native-paper';
+import Dialog from 'react-native-dialog';
+
+import * as ImagePicker from 'expo-image-picker';
 
 let unsubscribe;
 
 export default class EditProfile extends Component {
 
     state = {
-        initialSelected: [],
-        selectedItems: [],
         matric: null,
-        currname: null,
-        currroom: null
-    };
+        profilePicUrl: null,
+    }
 
-    things = [{
-        id: 'Basketball',
-        name: 'Basketball',
-    }, {
-        id: 'Badminton',
-        name: 'Badminton',
-    }, {
-        id: 'Handball',
-        name: 'Handball',
-    }, {
-        id: 'Swimming',
-        name: 'Swimming',
-    }, {
-        id: 'Band',
-        name: 'Band'
-    }, {
-        id: 'Ge Yao',
-        name: 'Ge Yao',
-    }, {
-        id: 'SHacapella',
-        name: 'SHacapella',
-    }, {
-        id: 'JCRC',
-        name: 'JCRC',
-    }, {
-        id: 'Sheares Link',
-        name: 'Sheares Link',
-    }, {
-        id: 'Sports Management Board',
-        name: 'Sports Management Board'
-    }];
+    uriToBlob = (uri) => {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
 
-    onSelectedItems = selectedCCAs => {
-        this.setState({ selectedCCAs });
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+
+            xhr.onerror = function () {
+                reject(new Error('uriToBlob failed'));
+            };
+
+            xhr.responseType = 'blob';
+
+            xhr.open('GET', uri, true);
+            xhr.send(null);
+        }).catch(alert);
+    }
+
+    uploadToFirebase = (blob) => {
+        //Alert.alert("This may take a few seconds.")
+        return new Promise((resolve, reject) => {
+            var storageRef = firebase.storage().ref();
+            var self = this;
+
+            storageRef.child('uploads/' + this.state.matric + '.jpg').put(blob, {
+                contentType: 'image/jpeg'
+            }).then((snapshot) => {
+                blob.close();
+                resolve(snapshot);
+            }).catch((error) => {
+                reject(error);
+            }).then(async function () {
+                var link = await firebase.storage().ref().child('uploads/' + self.state.matric + '.jpg').getDownloadURL();
+                await firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + self.state.matric).child('profilePicUrl').set(link)
+            }).then(() => {
+                Alert.alert(
+                    "Successful",
+                    "Profile picture changed!",
+                    [
+                        { text: "Ok", onPress: () => this.getDeets() }
+                    ])
+            })
+        }).catch(error => {
+            // do nothing when user does not select an image to upload.
+        });
+    }
+
+    handleOnPress = async () => {
+        let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+        let newPermission = await ImagePicker.getCameraRollPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            Alert.alert("Permission to access camera roll is required!");
+            return;
+        } else {
+            ImagePicker.launchImageLibraryAsync({
+                mediaTypes: "Images"
+            }).then((result) => {
+                if (!result.cancelled) {
+                    Alert.alert("This may take a few seconds. Click OK to continue.")
+                    const { height, width, type, uri } = result;
+                    return this.uriToBlob(uri)
+                }
+            }).then((blob) => {
+                return this.uploadToFirebase(blob);
+            }).then((snapshot) => {
+                console.log("File uploaded");
+            }).catch((error) => {
+                throw error;
+            });
+        }
     }
 
     getDeets = () => {
         let self = this;
         unsubscribe = firebase.auth().onAuthStateChanged(function (user) {
-            console.log('EditProfile chunk')
             if (user) {
-                console.log('user is signed in!')
-                console.log('user:', user)
                 self.setState({ matric: user.displayName })
-                firebase.database().ref('users/').child(user.displayName).on('value', function (snapshot) {
-                    self.setState({ currname: snapshot.val().name })
-                    self.setState({ currroom: snapshot.val().room })
-                    var grps = snapshot.val().cca
-                    grps === 'none'
-                        ? self.setState({ initialSelected: [] })
-                        : self.setState({ initialSelected: snapshot.val().cca })
-                    while (self.state.matric == null || self.state.currname == null || self.state.currroom == null) {
+                firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/').child(user.displayName).on('value', function (snapshot) {
+                    self.setState({ profilePicUrl: snapshot.val().profilePicUrl })
+                    while (self.state.matric == null || self.state.profilePicUrl == null) {
                         setTimeout(function () { }, 3000);
+                        console.log("getting data, setting timeout");
                     }
                 })
             } else {
                 console.log('user not signed in')
             }
         })
+    }
+
+    confirmDelete = () => {
+        firebase.storage().ref().child('uploads/' + this.state.matric + '.jpg').delete().then(function () {
+        }).catch(function (error) {
+        })
+        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + this.state.matric).child('profilePicUrl').set('default')
+    }
+
+    deletePicture = () => {
+        if (this.state.profilePicUrl === 'default') {
+            Alert.alert("Default profile picture cannot be deleted.")
+        } else {
+            Alert.alert(
+                "Delete Profile Picture",
+                "Please confirm deletion of profile picture. Your profile picture will be set to default. This action is irreversible.",
+                [
+                    { text: "Cancel", style: "cancel" },
+                    { text: "Confirm", onPress: () => this.confirmDelete() }
+                ]
+            )
+        }
     }
 
     componentDidMount() {
@@ -94,76 +147,63 @@ export default class EditProfile extends Component {
     }
 
     render() {
-        const { selectedCCAs } = this.state;
-        const curr = this.state.initialSelected;
+        const showDialog = () => {
+            this.setState({ dialog: true });
+        };
 
-        console.log('thismatric:', this.state)
+        const handleCancel = () => {
+            this.setState({ dialog: false });
+        };
 
-        const updateRoom = async (text) => {
-            this.state.currroom = text,
-                await firebase.database().ref('users/' + this.state.matric).child('room').set(this.state.currroom)
-        }
-
-        const onSave = async () => {
-            typeof selectedCCAs === 'undefined'
-                ? await firebase.database().ref('users/' + this.state.matric).child('cca').set('none')
-                : await firebase.database().ref('users/' + this.state.matric).child('cca').set(selectedCCAs);
-            this.props.navigation.navigate('Profile');
-        }
-
+        const handleConfirm = () => {
+            if (this.state.password1 == this.state.password2) {
+                var user = firebase.auth().currentUser;
+                user.updatePassword(this.state.password1).then(function () {
+                    //do nth
+                }).catch(function (error) {
+                    console.log(error);
+                })
+                Alert.alert(
+                    'Successful',
+                    'Password updated!',
+                    [
+                        {
+                            text: 'Ok',
+                            onPress: () => this.setState({ dialog: false }),
+                        }
+                    ]
+                )
+            } else {
+                alert("New passwords mismatch!");
+            }
+        };
         return (
-            <View style={{ flex: 1, padding: 20, flexDirection: 'column' }}>
-                <View style={styles.fieldView}>
-                    <Text>Name:</Text>
-                    <TextInput style={styles.details}
-                        multiline={false}
-                        placeholder={this.state.currname} />
-                </View>
-                <View style={styles.fieldView}>
-                    <Text>Matriculation Number:</Text>
-                    <TextInput style={styles.details}
-                        multiline={false}
-                        placeholder={this.state.matric} />
-                </View>
-                <View style={styles.fieldView}>
-                    <Text>Room Number:</Text>
-                    <TextInput style={styles.details}
-                        multiline={false}
-                        placeholder={this.state.currroom}
-                        onChangeText={updateRoom} />
-                </View>
-                <MultiSelect
-                    hideTags
-                    items={this.things}
-                    uniqueKey='id'
-                    ref={(component) => { this.multiSelect = component }}
-                    onSelectedItemsChange={this.onSelectedItems}
-                    selectedItems={selectedCCAs}
-                    selectText="Select Your CCAs"
-                    searchInputPlaceholderText="Search CCAs..."
-                    onChangeInput={(text) => console.log(text)}
-                    tagRemoveIconColor="#CCC"
-                    tagBorderColor="#CCC"
-                    tagTextColor="#CCC"
-                    selectedItemTextColor="#ffd4b3"
-                    selectedItemIconColor="#ffd4b3"
-                    itemTextColor="#000"
-                    displayKey='name'
-                    searchInputStyle={{ color: '#CCC' }}
-                    submitButtonColor="#CCC"
-                    submitButtonText="Selection Complete"
-                    styleItemsContainer={{ maxHeight: 150 }}
-                />
-                <Text>
-                    {typeof this.state.initialSelected === 'undefined' ? 'None selected yet.' : 'Current CCAs Logged In: ' + this.state.initialSelected.join(', ')}
-                </Text>
-                <Text>
-                    {typeof selectedCCAs === 'undefined' ? 'New Edit: ' : 'Updated CCAs: ' + selectedCCAs.join(', ')}
-                </Text>
-                <Button style={styles.savechangesbtn}
-                    onPress={onSave}>
-                    <Text>Save Changes</Text>
-                </Button>
+            <View style={styles.container}>
+                <TouchableOpacity style={styles.textbtn} onPress={this.handleOnPress}>
+                    <Text style={styles.textstyle}>Change Profile Picture</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.deletebtn} onPress={this.deletePicture}>
+                    <Text style={styles.deleteword}>Delete Current Profile Picture</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.textbtn} onPress={showDialog}>
+                    <Text style={styles.textstyle}>Change Password</Text>
+                </TouchableOpacity>
+                <Dialog.Container visible={this.state.dialog}>
+                    <Dialog.Title>Change Password</Dialog.Title>
+                    <Dialog.Description>
+                        Please enter current password and new password.
+                        </Dialog.Description>
+                    <Dialog.Input
+                        placeholder="New Password"
+                        secureTextEntry
+                        onChangeText={(inputText) => this.setState({ password1: inputText })} />
+                    <Dialog.Input
+                        placeholder="Confirm New Password"
+                        secureTextEntry
+                        onChangeText={(inputText) => this.setState({ password2: inputText })} />
+                    <Dialog.Button label="Cancel" onPress={handleCancel} />
+                    <Dialog.Button label="Confirm" onPress={handleConfirm} />
+                </Dialog.Container>
             </View>
         );
     }
@@ -174,33 +214,32 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
+        flexDirection: 'column',
     },
-    noEditText: {
-        backgroundColor: 'white',
-        borderLeftWidth: 13,
-        borderTopWidth: 4,
-        borderBottomWidth: 4,
-        color: 'gray',
-        fontSize: 16,
-        flex: 6
+    deleteword: {
+        color: '#ff0000',
+        fontSize: 16
     },
-    fieldView: {
+    deletebtn: {
         flexDirection: 'row',
-        margin: 8,
-        justifyContent: 'space-between'
-    },
-    details: {
-        width: 200,
-        height: 30,
-        backgroundColor: 'white'
-    },
-    savechangesbtn: {
         backgroundColor: '#ffd4b3',
-        marginTop: 20,
-        width: 300,
-        height: 50,
+        height: 80,
+        width: 380,
         justifyContent: 'center',
-        alignSelf: 'center'
+        alignItems: 'center',
+        borderRadius: 6,
+        marginTop: 15
+    },
+    textbtn: {
+        backgroundColor: '#ffd4b3',
+        height: 80,
+        width: 380,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 6,
+        marginTop: 15
+    },
+    textstyle: {
+        fontSize: 16
     }
 });
