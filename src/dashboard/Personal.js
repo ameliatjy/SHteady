@@ -50,9 +50,13 @@ export default class Personal extends Component {
 
     componentWillUnmount() {
         var user = firebase.auth().currentUser;
-        var matric = user.displayName
 
-        firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/dashboard').off()
+        if (user) {
+            var matric = user.displayName
+            firebase.database().ref('1F0zRhHHyuRlCyc51oJNn1z0mOaNA7Egv0hx3QSCrzAg/users/' + matric + '/dashboard').off()
+        } else {
+
+        }
     }
 
     checkTaskProgress = (isInProgress) => {
