@@ -102,7 +102,7 @@ const Signup = ({ navigation }) => {
                 </View>
                 <TouchableOpacity style={styles.button} loading={loading} mode='contained' onPress={
                     onSignUpPressed}>
-                    <Text style={styles.buttonText}>Signup</Text>
+                    <Text style={styles.buttonText}>Activate</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
             <View style={styles.signupTextCont}>
