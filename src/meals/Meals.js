@@ -381,31 +381,33 @@ export default class Meals extends Component {
                         <Text style={styles.redeembtn}>Redeem</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ flexDirection: 'row' }} >
-                    <View style={{ justifyContent: 'flex-end' }}>
-                        <TouchableOpacity onPress={this.viewMenu}>
-                            <Image source={require('../images/menu.png')}
-                                style={styles.circlebtns} />
-                            <Button title="View Menu" onPress={this.viewMenu} color='#616161' />
-                        </TouchableOpacity>
+                <View style={styles.btncontainer}>
+                    <View style={{ flexDirection: 'row' }} >
+                        <View style={{ justifyContent: 'flex-end' }}>
+                            <TouchableOpacity onPress={this.viewMenu}>
+                                <Image source={require('../images/menu.png')}
+                                    style={styles.circlebtns} />
+                                <Button title="View Menu" onPress={this.viewMenu} color='#616161' />
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-                <View style={{ flexDirection: 'row' }} >
-                    <View style={{ justifyContent: 'flex-end' }}>
-                        <TouchableOpacity onPress={this.donateMeal}>
-                            <Image source={require('../images/donatemeal.png')}
-                                style={styles.circlebtns} />
-                            <Button title="Donate Your Meal" onPress={this.donateMeal} color='#616161' />
-                        </TouchableOpacity>
+                    <View style={{ flexDirection: 'row' }} >
+                        <View style={{ justifyContent: 'flex-end' }}>
+                            <TouchableOpacity onPress={this.donateMeal}>
+                                <Image source={require('../images/donatemeal.png')}
+                                    style={styles.circlebtns} />
+                                <Button title="Donate Your Meal" onPress={this.donateMeal} color='#616161' />
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-                <View style={{ flexDirection: 'row' }} >
-                    <View style={{ justifyContent: 'flex-end' }}>
-                        <TouchableOpacity onPress={this.secondMeal}>
-                            <Image source={require('../images/secondserving.png')}
-                                style={styles.circlebtns} />
-                            <Button title="Second Serving Plz..." onPress={this.secondMeal} color='#616161' />
-                        </TouchableOpacity>
+                    <View style={{ flexDirection: 'row' }} >
+                        <View style={{ justifyContent: 'flex-end' }}>
+                            <TouchableOpacity onPress={this.secondMeal}>
+                                <Image source={require('../images/secondserving.png')}
+                                    style={styles.circlebtns} />
+                                <Button title="Second Serving Plz..." onPress={this.secondMeal} color='#616161' />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -418,12 +420,15 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        //justifyContent: 'space-between',
     },
     mealcreditdisplay: {
         backgroundColor: '#ffd4b3',
         flexDirection: 'row',
-        paddingVertical: 15,
+        alignItems: 'center',
+        //justifyContent: 'center',
+        //paddingVertical: 15,
+        flex: 0.1
     },
     mealcreditword: {
         flex: 9,
@@ -431,10 +436,16 @@ const styles = StyleSheet.create({
         fontSize: 17
     },
     redeembtn: {
-        flex: 3,
+        //flex: 3,
         marginRight: 20,
         fontSize: 17,
-        color: '#616161'
+        color: '#616161',
+    },
+    btncontainer: {
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        flex: 0.9,
+        marginTop: 10
     },
     circlebtns: {
         width: 140,
