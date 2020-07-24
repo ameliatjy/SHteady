@@ -24,7 +24,7 @@ firebase.initializeApp(firebaseConfig);
 
 jest.useFakeTimers();
 
-test('Renders snapshot as expected', () => {
+test('View Menu page renders snapshot as expected', () => {
     const tree = renderer.create(<ViewMenu/>).toJSON();
     expect(tree).toMatchSnapshot();
 });
