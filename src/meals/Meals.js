@@ -251,7 +251,7 @@ export default class Meals extends Component {
                         console.log("getting donationtime");
                     }
                 })
-                
+
                 var date = new Date().getDate().toString();
                 if (date.length == 1) {
                     date = "0" + date;
@@ -381,7 +381,7 @@ export default class Meals extends Component {
                         <Text style={styles.redeembtn}>Redeem</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ flexDirection: 'row', paddingTop: 5, flex: 9 }} >
+                <View style={{ flexDirection: 'row' }} >
                     <View style={{ justifyContent: 'flex-end' }}>
                         <TouchableOpacity onPress={this.viewMenu}>
                             <Image source={require('../images/menu.png')}
@@ -390,7 +390,7 @@ export default class Meals extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', paddingTop: 5, flex: 9 }} >
+                <View style={{ flexDirection: 'row' }} >
                     <View style={{ justifyContent: 'flex-end' }}>
                         <TouchableOpacity onPress={this.donateMeal}>
                             <Image source={require('../images/donatemeal.png')}
@@ -399,7 +399,7 @@ export default class Meals extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', paddingTop: 5, flex: 9 }} >
+                <View style={{ flexDirection: 'row' }} >
                     <View style={{ justifyContent: 'flex-end' }}>
                         <TouchableOpacity onPress={this.secondMeal}>
                             <Image source={require('../images/secondserving.png')}
@@ -408,7 +408,7 @@ export default class Meals extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View >
+            </View>
         );
     }
 }
@@ -418,13 +418,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
     },
     mealcreditdisplay: {
         backgroundColor: '#ffd4b3',
         flexDirection: 'row',
         paddingVertical: 15,
-        flex: 1
     },
     mealcreditword: {
         flex: 9,
