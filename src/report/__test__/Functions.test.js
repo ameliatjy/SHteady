@@ -32,11 +32,11 @@
 
 const functions = require('../History')
 
-test('actual time', () => {
+test('Convert time from timestamp', () => {
     expect(functions.convertTime(1593163553579)).toBe('Jun 26, 2020 5:25 PM')
 })
 
-test('status container', () => {
+test('Check status container styles', () => {
     expect(functions.statusCon('COMPLETED')).toStrictEqual({
         height: 30,
         width: 110,
