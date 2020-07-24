@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
         color: '#616161',
     },
     btncontainer: {
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         alignItems: 'center',
         flex: 0.9,
         marginTop: 10
