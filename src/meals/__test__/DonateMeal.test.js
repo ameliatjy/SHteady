@@ -21,7 +21,7 @@ firebase.initializeApp(firebaseConfig);
 
 jest.useFakeTimers();
 
-test('Renders snapshot as expected', () => {
+test('Donate Meals page renders snapshot as expected', () => {
     const tree = renderer.create(<DonateMeal/>).toJSON();
     expect(tree).toMatchSnapshot();
 });
